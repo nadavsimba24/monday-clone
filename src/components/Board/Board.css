@@ -32,13 +32,13 @@
 }
 
 .board-title:hover {
-  color: #579bfc;
+  color: #4caf82;
 }
 
 .board-title-input {
   font-size: 22px;
   font-weight: 700;
-  border: 2px solid #579bfc;
+  border: 2px solid #4caf82;
   border-radius: 4px;
   padding: 2px 6px;
   outline: none;
@@ -84,12 +84,12 @@
 }
 
 .header-action-btn.primary {
-  background: #579bfc;
+  background: #4caf82;
   color: #fff;
 }
 
 .header-action-btn.primary:hover {
-  background: #4b8ae8;
+  background: #3d9e70;
 }
 
 .header-action-btn:disabled {
@@ -129,7 +129,7 @@
   align-items: center;
   gap: 6px;
   padding: 10px 20px;
-  background: #579bfc;
+  background: #4caf82;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -139,7 +139,7 @@
 }
 
 .btn-primary:hover {
-  background: #4b8ae8;
+  background: #3d9e70;
 }
 
 /* Group */
@@ -187,7 +187,7 @@
 .group-title-input {
   font-size: 16px;
   font-weight: 700;
-  border: 2px solid #579bfc;
+  border: 2px solid #4caf82;
   border-radius: 4px;
   padding: 1px 4px;
   outline: none;
@@ -297,7 +297,7 @@
   width: 15px;
   height: 15px;
   cursor: pointer;
-  accent-color: #579bfc;
+  accent-color: #4caf82;
 }
 
 .item-name-cell {
@@ -319,12 +319,12 @@
 }
 
 .item-name:hover {
-  color: #579bfc;
+  color: #4caf82;
 }
 
 .item-name-input {
   width: 100%;
-  border: 2px solid #579bfc;
+  border: 2px solid #4caf82;
   border-radius: 2px;
   padding: 4px 6px;
   font-size: 14px;
@@ -434,8 +434,8 @@
 
 .add-group-btn:hover {
   background: #f5f6f8;
-  border-color: #579bfc;
-  color: #579bfc;
+  border-color: #4caf82;
+  color: #4caf82;
 }
 
 /* Add Column */
@@ -460,8 +460,8 @@
 }
 
 .add-column-btn:hover {
-  border-color: #579bfc;
-  color: #579bfc;
+  border-color: #4caf82;
+  color: #4caf82;
 }
 
 .add-column-dropdown {
@@ -579,7 +579,7 @@
 }
 
 .search-bar:focus-within {
-  border-color: #579bfc;
+  border-color: #4caf82;
 }
 
 .search-icon {

@@ -3,8 +3,8 @@ import { v4 as uuid } from 'uuid';
 const PEOPLE = [
   { id: 'p1', name: 'Anna K.', color: '#ff642e' },
   { id: 'p2', name: 'John D.', color: '#00c875' },
-  { id: 'p3', name: 'Sarah M.', color: '#579bfc' },
-  { id: 'p4', name: 'Mike R.', color: '#a25ddc' },
+  { id: 'p3', name: 'Sarah M.', color: '#4caf82' },
+  { id: 'p4', name: 'Mike R.', color: '#66bb6a' },
 ];
 
 export const STATUS_OPTIONS = [
@@ -19,7 +19,7 @@ export const PRIORITY_OPTIONS = [
   { label: 'Critical', color: '#333333' },
   { label: 'High', color: '#e2445c' },
   { label: 'Medium', color: '#fdab3d' },
-  { label: 'Low', color: '#579bfc' },
+  { label: 'Low', color: '#4caf82' },
   { label: '', color: '#c4c4c4' },
 ];
 
@@ -54,7 +54,7 @@ export function createDefaultData() {
           {
             id: uuid(),
             title: 'To Do',
-            color: '#579bfc',
+            color: '#4caf82',
             collapsed: false,
             items: [
               {
@@ -131,7 +131,7 @@ export function createDefaultData() {
           {
             id: uuid(),
             title: 'Minor Issues',
-            color: '#579bfc',
+            color: '#4caf82',
             collapsed: false,
             items: [
               { id: uuid(), name: 'Typo on about page', values: {} },

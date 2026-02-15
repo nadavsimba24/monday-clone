@@ -1,10 +1,10 @@
-import { useState, useRef, useEffect } from 'react';
+import { useRef, useEffect } from 'react';
 
 const COLORS = [
-  '#579bfc', '#00c875', '#fdab3d', '#e2445c', '#a25ddc',
-  '#ff642e', '#00d2d2', '#037f4c', '#bb3354', '#175a63',
-  '#ff158a', '#784bd1', '#66ccff', '#7f5347', '#ff5ac4',
-  '#cab641', '#9cd326', '#225091', '#4eccc6', '#c4c4c4',
+  '#4caf82', '#81c784', '#a5d6a7', '#00c875', '#2e7d5a',
+  '#fdab3d', '#e2445c', '#ff642e', '#00d2d2', '#037f4c',
+  '#66bb6a', '#43a047', '#c8e6c9', '#bb3354', '#175a63',
+  '#cab641', '#9cd326', '#4eccc6', '#7f5347', '#c4c4c4',
 ];
 
 export default function ColorPicker({ currentColor, onSelect, onClose }) {

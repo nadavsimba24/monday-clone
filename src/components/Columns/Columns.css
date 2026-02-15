@@ -101,7 +101,7 @@
 }
 
 .date-dropdown input[type="date"]:focus {
-  border-color: #579bfc;
+  border-color: #4caf82;
 }
 
 .clear-date {
@@ -183,7 +183,7 @@
 .text-cell-input {
   width: 100%;
   height: 100%;
-  border: 2px solid #579bfc;
+  border: 2px solid #4caf82;
   border-radius: 0;
   padding: 0 10px;
   font-size: 13px;

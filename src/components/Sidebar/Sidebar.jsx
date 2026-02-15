@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useBoard } from '../../context/BoardContext';
-import { FiPlus, FiStar, FiTrash2, FiCopy, FiChevronLeft, FiChevronRight, FiSearch, FiGrid } from 'react-icons/fi';
+import { FiPlus, FiStar, FiTrash2, FiCopy, FiChevronLeft, FiChevronRight, FiSearch, FiGrid, FiLayers } from 'react-icons/fi';
+import WorkflowManager from '../Workflow/WorkflowManager';
 import './Sidebar.css';
 
 export default function Sidebar() {
@@ -8,6 +9,7 @@ export default function Sidebar() {
   const [collapsed, setCollapsed] = useState(false);
   const [search, setSearch] = useState('');
   const [contextMenu, setContextMenu] = useState(null);
+  const [showWorkflows, setShowWorkflows] = useState(false);
 
   const favorites = state.boards.filter((b) => b.favorite);
   const filtered = state.boards.filter((b) =>
@@ -42,6 +44,13 @@ export default function Sidebar() {
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
+            </div>
+
+            <div className="sidebar-workflow-btn-wrapper">
+              <button className="sidebar-workflow-btn" onClick={() => setShowWorkflows(true)}>
+                <FiLayers size={15} />
+                <span>Workflow Manager</span>
+              </button>
             </div>
 
             {favorites.length > 0 && !search && (
@@ -133,6 +142,10 @@ export default function Sidebar() {
             </div>
           </div>
         </div>
+      )}
+
+      {showWorkflows && (
+        <WorkflowManager onClose={() => setShowWorkflows(false)} />
       )}
     </>
   );

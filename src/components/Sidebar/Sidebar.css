@@ -1,7 +1,7 @@
 .sidebar {
   width: 260px;
   min-width: 260px;
-  background: #292f4c;
+  background: #1e3a2f;
   color: #d5d8df;
   display: flex;
   flex-direction: column;
@@ -34,7 +34,7 @@
   width: 28px;
   height: 28px;
   border-radius: 6px;
-  background: linear-gradient(135deg, #579bfc, #a25ddc);
+  background: linear-gradient(135deg, #4caf82, #81c784);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -65,6 +65,30 @@
 
 .sidebar-search input::placeholder {
   color: #9699a6;
+}
+
+.sidebar-workflow-btn-wrapper {
+  padding: 8px 12px 4px;
+}
+
+.sidebar-workflow-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 9px 12px;
+  background: linear-gradient(135deg, #4caf82, #81c784);
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.sidebar-workflow-btn:hover {
+  opacity: 0.9;
 }
 
 .sidebar-section {
@@ -122,7 +146,7 @@
 
 .board-item.active {
   background: rgba(255,255,255,0.1);
-  border-left-color: #579bfc;
+  border-left-color: #4caf82;
   color: #fff;
 }
 
@@ -145,7 +169,7 @@
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  background: #292f4c;
+  background: #1e3a2f;
   border: 1px solid rgba(255,255,255,0.15);
   color: #d5d8df;
   cursor: pointer;
@@ -156,7 +180,7 @@
 }
 
 .collapse-btn:hover {
-  background: #363c5a;
+  background: #2a5240;
 }
 
 /* Context Menu */

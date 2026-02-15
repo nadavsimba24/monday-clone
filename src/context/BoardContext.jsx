@@ -26,7 +26,7 @@ function boardReducer(state, action) {
           {
             id: uuid(),
             title: 'Group 1',
-            color: '#579bfc',
+            color: '#4caf82',
             collapsed: false,
             items: [],
           },
@@ -36,6 +36,14 @@ function boardReducer(state, action) {
         ...state,
         boards: [...state.boards, newBoard],
         activeBoardId: newBoard.id,
+      };
+    }
+
+    case 'ADD_BOARD_DIRECT': {
+      return {
+        ...state,
+        boards: [...state.boards, action.board],
+        activeBoardId: action.board.id,
       };
     }
 
@@ -94,7 +102,7 @@ function boardReducer(state, action) {
           {
             id: uuid(),
             title: action.title || 'New Group',
-            color: action.color || '#579bfc',
+            color: action.color || '#4caf82',
             collapsed: false,
             items: [],
           },

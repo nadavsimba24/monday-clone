@@ -165,7 +165,7 @@
 }
 
 .comment-input-area textarea:focus {
-  border-color: #579bfc;
+  border-color: #4caf82;
 }
 
 .send-comment-btn {
@@ -174,7 +174,7 @@
   gap: 6px;
   margin-top: 8px;
   padding: 6px 14px;
-  background: #579bfc;
+  background: #4caf82;
   color: #fff;
   border: none;
   border-radius: 6px;
@@ -188,7 +188,7 @@
 }
 
 .send-comment-btn:hover:not(:disabled) {
-  background: #4b8ae8;
+  background: #3d9e70;
 }
 
 .comments-list {
