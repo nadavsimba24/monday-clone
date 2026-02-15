@@ -1,0 +1,201 @@
+.cell-wrapper {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.status-cell, .priority-cell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: opacity 0.15s;
+  user-select: none;
+}
+
+.status-cell:hover {
+  opacity: 0.85;
+}
+
+.cell-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.18);
+  padding: 8px 0;
+  z-index: 100;
+  min-width: 160px;
+}
+
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  font-size: 13px;
+  color: #323338;
+  cursor: pointer;
+}
+
+.dropdown-option:hover {
+  background: #f5f6f8;
+}
+
+.dropdown-option.selected {
+  background: #e6f4ff;
+}
+
+.option-color {
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.clear-option {
+  color: #999;
+  border-top: 1px solid #eee;
+  margin-top: 4px;
+  padding-top: 8px;
+}
+
+/* Date Cell */
+.date-cell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 13px;
+  color: #323338;
+}
+
+.date-cell.overdue {
+  color: #e2445c;
+  font-weight: 500;
+}
+
+.date-dropdown {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.date-dropdown input[type="date"] {
+  padding: 8px;
+  border: 1px solid #c3c6d4;
+  border-radius: 6px;
+  font-size: 14px;
+  outline: none;
+}
+
+.date-dropdown input[type="date"]:focus {
+  border-color: #579bfc;
+}
+
+.clear-date {
+  background: none;
+  border: none;
+  color: #e2445c;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 4px;
+  text-align: left;
+}
+
+/* Person Cell */
+.person-cell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.person-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.person-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.person-avatar.small {
+  width: 24px;
+  height: 24px;
+  font-size: 11px;
+}
+
+.person-name {
+  font-size: 13px;
+  color: #323338;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.person-empty {
+  color: #c4c4c4;
+}
+
+.person-dropdown {
+  min-width: 180px;
+}
+
+/* Text Cell */
+.text-cell {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  font-size: 13px;
+  color: #323338;
+  cursor: pointer;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-cell-input {
+  width: 100%;
+  height: 100%;
+  border: 2px solid #579bfc;
+  border-radius: 0;
+  padding: 0 10px;
+  font-size: 13px;
+  outline: none;
+  background: #fff;
+  box-sizing: border-box;
+}
+
+.number-cell {
+  justify-content: flex-end;
+}
+
+.number-input {
+  text-align: right;
+}
