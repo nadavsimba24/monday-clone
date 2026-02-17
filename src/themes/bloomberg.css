@@ -1,0 +1,875 @@
+/* ============================================
+   BLOOMBERG TERMINAL THEME
+   Dense, monospace, green-on-black aesthetic
+   ============================================ */
+
+[data-theme="bloomberg"] {
+  --bb-bg: #0a0e14;
+  --bb-bg2: #0f1319;
+  --bb-bg3: #141a22;
+  --bb-panel: #111720;
+  --bb-border: #1e2a36;
+  --bb-border2: #263340;
+  --bb-text: #ff9800;
+  --bb-text2: #b0b8c4;
+  --bb-text3: #6a7585;
+  --bb-green: #33ff33;
+  --bb-green2: #00cc44;
+  --bb-amber: #ff9800;
+  --bb-red: #ff3333;
+  --bb-blue: #3399ff;
+  --bb-yellow: #ffcc00;
+  --bb-cyan: #00cccc;
+  --bb-white: #e0e8f0;
+}
+
+/* Global overrides */
+[data-theme="bloomberg"] body {
+  background: var(--bb-bg);
+  color: var(--bb-text);
+  font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', 'Consolas', 'Monaco', 'Courier New', monospace;
+  font-size: 12px;
+}
+
+[data-theme="bloomberg"] * {
+  scrollbar-color: var(--bb-border2) var(--bb-bg2);
+}
+
+[data-theme="bloomberg"] ::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+[data-theme="bloomberg"] ::-webkit-scrollbar-track {
+  background: var(--bb-bg2);
+}
+
+[data-theme="bloomberg"] ::-webkit-scrollbar-thumb {
+  background: var(--bb-border2);
+  border-radius: 0;
+}
+
+/* ---- SIDEBAR ---- */
+[data-theme="bloomberg"] .sidebar {
+  background: var(--bb-bg);
+  border-right: 1px solid var(--bb-border);
+  font-family: 'SF Mono', 'Consolas', monospace;
+}
+
+[data-theme="bloomberg"] .workspace-name {
+  color: var(--bb-amber);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-size: 12px;
+}
+
+[data-theme="bloomberg"] .workspace-icon {
+  background: var(--bb-amber);
+  color: #000;
+  border-radius: 2px;
+  font-weight: 900;
+}
+
+[data-theme="bloomberg"] .sidebar-header {
+  border-bottom: 1px solid var(--bb-border);
+}
+
+[data-theme="bloomberg"] .sidebar-search {
+  background: var(--bb-bg3);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .sidebar-search input {
+  color: var(--bb-green);
+  font-family: inherit;
+}
+
+[data-theme="bloomberg"] .sidebar-search input::placeholder {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .sidebar-workflow-btn {
+  background: var(--bb-bg3);
+  border: 1px solid var(--bb-amber);
+  border-radius: 2px;
+  color: var(--bb-amber);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 11px;
+  font-family: inherit;
+}
+
+[data-theme="bloomberg"] .sidebar-workflow-btn:hover {
+  background: var(--bb-amber);
+  color: #000;
+  opacity: 1;
+}
+
+[data-theme="bloomberg"] .section-title {
+  color: var(--bb-text3);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-family: inherit;
+}
+
+[data-theme="bloomberg"] .board-item {
+  color: var(--bb-text2);
+  border-left: 2px solid transparent;
+  border-radius: 0;
+  font-size: 12px;
+}
+
+[data-theme="bloomberg"] .board-item:hover {
+  background: var(--bb-bg3);
+  color: var(--bb-green);
+}
+
+[data-theme="bloomberg"] .board-item.active {
+  background: var(--bb-bg3);
+  border-left-color: var(--bb-amber);
+  color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .fav-icon {
+  color: var(--bb-yellow);
+}
+
+[data-theme="bloomberg"] .add-board-btn {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .add-board-btn:hover {
+  color: var(--bb-green);
+  background: var(--bb-bg3);
+}
+
+[data-theme="bloomberg"] .collapse-btn {
+  background: var(--bb-bg);
+  border-color: var(--bb-border);
+  color: var(--bb-text3);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .collapse-btn:hover {
+  background: var(--bb-bg3);
+  color: var(--bb-amber);
+}
+
+/* Settings panel in sidebar */
+[data-theme="bloomberg"] .settings-panel {
+  background: var(--bb-bg);
+  border-top: 1px solid var(--bb-border);
+}
+
+[data-theme="bloomberg"] .settings-row label {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .settings-toggle {
+  background: var(--bb-bg3);
+  border-color: var(--bb-border);
+  color: var(--bb-text2);
+}
+
+[data-theme="bloomberg"] .settings-toggle.active {
+  background: var(--bb-amber);
+  border-color: var(--bb-amber);
+  color: #000;
+}
+
+/* ---- BOARD VIEW ---- */
+[data-theme="bloomberg"] .board-view {
+  background: var(--bb-bg);
+}
+
+[data-theme="bloomberg"] .board-header {
+  border-bottom: 1px solid var(--bb-border);
+}
+
+[data-theme="bloomberg"] .board-title {
+  color: var(--bb-amber);
+  font-family: 'SF Mono', 'Consolas', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="bloomberg"] .board-title:hover {
+  color: var(--bb-green);
+}
+
+[data-theme="bloomberg"] .board-title-input {
+  background: var(--bb-bg3);
+  border-color: var(--bb-amber);
+  color: var(--bb-amber);
+  font-family: inherit;
+  border-radius: 0;
+}
+
+[data-theme="bloomberg"] .fav-btn {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .fav-btn.active {
+  color: var(--bb-yellow);
+}
+
+[data-theme="bloomberg"] .header-action-btn {
+  background: var(--bb-bg3);
+  border: 1px solid var(--bb-border);
+  color: var(--bb-text2);
+  border-radius: 2px;
+  font-family: inherit;
+  text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="bloomberg"] .header-action-btn.primary {
+  background: var(--bb-amber);
+  border-color: var(--bb-amber);
+  color: #000;
+  font-weight: 700;
+}
+
+[data-theme="bloomberg"] .header-action-btn.primary:hover {
+  background: #e68a00;
+}
+
+[data-theme="bloomberg"] .board-empty-state {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .board-empty-state h2 {
+  color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .btn-primary {
+  background: var(--bb-amber);
+  color: #000;
+  border-radius: 2px;
+  font-family: inherit;
+  text-transform: uppercase;
+}
+
+[data-theme="bloomberg"] .btn-primary:hover {
+  background: #e68a00;
+}
+
+/* Search bar */
+[data-theme="bloomberg"] .search-bar {
+  background: var(--bb-bg3);
+  border-color: var(--bb-border);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .search-bar:focus-within {
+  border-color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .search-bar input {
+  color: var(--bb-green);
+  font-family: inherit;
+}
+
+[data-theme="bloomberg"] .search-icon {
+  color: var(--bb-text3);
+}
+
+/* ---- GROUPS ---- */
+[data-theme="bloomberg"] .group-header-row {
+  background: var(--bb-bg);
+}
+
+[data-theme="bloomberg"] .group-title {
+  font-family: 'SF Mono', 'Consolas', monospace;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 13px;
+}
+
+[data-theme="bloomberg"] .group-title-input {
+  background: var(--bb-bg3);
+  border-color: var(--bb-amber);
+  font-family: inherit;
+  border-radius: 0;
+}
+
+[data-theme="bloomberg"] .group-count {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .collapse-group-btn {
+  color: inherit;
+}
+
+[data-theme="bloomberg"] .group-menu-btn:hover {
+  background: var(--bb-bg3);
+  color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .group-menu-dropdown {
+  background: var(--bb-panel);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.6);
+}
+
+[data-theme="bloomberg"] .group-column-headers {
+  border-bottom: 1px solid var(--bb-border);
+}
+
+[data-theme="bloomberg"] .column-header {
+  color: var(--bb-text3);
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+/* ---- ITEM ROWS ---- */
+[data-theme="bloomberg"] .item-row {
+  border-bottom: 1px solid var(--bb-border);
+}
+
+[data-theme="bloomberg"] .item-row:hover {
+  background: var(--bb-bg3);
+}
+
+[data-theme="bloomberg"] .item-row.selected {
+  background: rgba(255, 152, 0, 0.08);
+}
+
+[data-theme="bloomberg"] .item-checkbox-area input[type="checkbox"] {
+  accent-color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .item-name-cell {
+  border-right-color: var(--bb-border);
+}
+
+[data-theme="bloomberg"] .item-name {
+  color: var(--bb-white);
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 12px;
+}
+
+[data-theme="bloomberg"] .item-name:hover {
+  color: var(--bb-green);
+}
+
+[data-theme="bloomberg"] .item-name-input {
+  background: var(--bb-bg3);
+  border-color: var(--bb-amber);
+  color: var(--bb-green);
+  font-family: inherit;
+  border-radius: 0;
+}
+
+[data-theme="bloomberg"] .item-cell {
+  border-right-color: var(--bb-border);
+}
+
+/* ---- CELLS ---- */
+[data-theme="bloomberg"] .status-cell {
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 11px;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+[data-theme="bloomberg"] .cell-dropdown {
+  background: var(--bb-panel);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+}
+
+[data-theme="bloomberg"] .dropdown-option {
+  color: var(--bb-text2);
+  font-family: inherit;
+  font-size: 12px;
+}
+
+[data-theme="bloomberg"] .dropdown-option:hover {
+  background: var(--bb-bg3);
+  color: var(--bb-white);
+}
+
+[data-theme="bloomberg"] .dropdown-option.selected {
+  background: rgba(255, 152, 0, 0.12);
+}
+
+[data-theme="bloomberg"] .clear-option {
+  color: var(--bb-text3);
+  border-top-color: var(--bb-border);
+}
+
+[data-theme="bloomberg"] .date-cell {
+  color: var(--bb-cyan);
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 12px;
+}
+
+[data-theme="bloomberg"] .date-cell.overdue {
+  color: var(--bb-red);
+}
+
+[data-theme="bloomberg"] .date-dropdown {
+  background: var(--bb-panel);
+  border: 1px solid var(--bb-border);
+}
+
+[data-theme="bloomberg"] .date-dropdown input[type="date"] {
+  background: var(--bb-bg3);
+  border-color: var(--bb-border);
+  color: var(--bb-green);
+  font-family: inherit;
+  border-radius: 0;
+  color-scheme: dark;
+}
+
+[data-theme="bloomberg"] .date-dropdown input[type="date"]:focus {
+  border-color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .clear-date {
+  color: var(--bb-red);
+}
+
+[data-theme="bloomberg"] .person-name {
+  color: var(--bb-blue);
+  font-family: inherit;
+}
+
+[data-theme="bloomberg"] .person-dropdown {
+  background: var(--bb-panel);
+  border: 1px solid var(--bb-border);
+}
+
+[data-theme="bloomberg"] .text-cell {
+  color: var(--bb-text2);
+  font-family: inherit;
+  font-size: 12px;
+}
+
+[data-theme="bloomberg"] .text-cell-input {
+  background: var(--bb-bg3);
+  border-color: var(--bb-amber);
+  color: var(--bb-green);
+  font-family: inherit;
+  border-radius: 0;
+}
+
+[data-theme="bloomberg"] .number-cell {
+  color: var(--bb-green);
+}
+
+/* ---- ADD ITEM ---- */
+[data-theme="bloomberg"] .add-item-trigger:hover {
+  background: var(--bb-bg3);
+}
+
+[data-theme="bloomberg"] .add-item-text {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .add-item-input {
+  color: var(--bb-green);
+  font-family: inherit;
+}
+
+/* ---- SUMMARY ROW ---- */
+[data-theme="bloomberg"] .summary-row {
+  background: var(--bb-bg2);
+  border-bottom-color: var(--bb-border);
+}
+
+[data-theme="bloomberg"] .summary-count {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .summary-cell {
+  border-right-color: var(--bb-border);
+}
+
+[data-theme="bloomberg"] .summary-number {
+  color: var(--bb-green);
+}
+
+/* ---- ADD GROUP ---- */
+[data-theme="bloomberg"] .add-group-btn {
+  border-color: var(--bb-border);
+  color: var(--bb-text3);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .add-group-btn:hover {
+  background: var(--bb-bg3);
+  border-color: var(--bb-amber);
+  color: var(--bb-amber);
+}
+
+/* ---- ADD COLUMN ---- */
+[data-theme="bloomberg"] .add-column-btn {
+  border-color: var(--bb-border);
+  color: var(--bb-text3);
+  background: var(--bb-bg);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .add-column-btn:hover {
+  border-color: var(--bb-amber);
+  color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .add-column-dropdown {
+  background: var(--bb-panel);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+}
+
+/* ---- BULK ACTIONS ---- */
+[data-theme="bloomberg"] .bulk-actions-bar {
+  background: var(--bb-bg2);
+  border-top: 1px solid var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .bulk-btn {
+  background: var(--bb-bg3);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+  font-family: inherit;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="bloomberg"] .bulk-btn:hover {
+  border-color: var(--bb-amber);
+  background: var(--bb-bg3);
+}
+
+[data-theme="bloomberg"] .bulk-btn.danger:hover {
+  background: var(--bb-red);
+  border-color: var(--bb-red);
+}
+
+[data-theme="bloomberg"] .bulk-move-dropdown {
+  background: var(--bb-panel);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+}
+
+/* ---- COLOR PICKER ---- */
+[data-theme="bloomberg"] .color-picker-popup {
+  background: var(--bb-panel);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .color-swatch {
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .color-swatch.active {
+  border-color: var(--bb-amber);
+}
+
+/* ---- CONTEXT MENU ---- */
+[data-theme="bloomberg"] .context-menu {
+  background: var(--bb-panel);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+}
+
+[data-theme="bloomberg"] .context-item {
+  color: var(--bb-text2);
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 12px;
+}
+
+[data-theme="bloomberg"] .context-item:hover {
+  background: var(--bb-bg3);
+  color: var(--bb-white);
+}
+
+[data-theme="bloomberg"] .context-item.danger {
+  color: var(--bb-red);
+}
+
+/* ---- ITEM DETAIL PANEL ---- */
+[data-theme="bloomberg"] .detail-overlay {
+  background: rgba(0,0,0,0.7);
+}
+
+[data-theme="bloomberg"] .detail-panel {
+  background: var(--bb-bg);
+  border-left: 1px solid var(--bb-border);
+  box-shadow: -4px 0 20px rgba(0,0,0,0.5);
+}
+
+[data-theme="bloomberg"] .detail-title {
+  color: var(--bb-amber);
+  font-family: 'SF Mono', 'Consolas', monospace;
+  text-transform: uppercase;
+}
+
+[data-theme="bloomberg"] .detail-action-btn {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .detail-action-btn:hover {
+  background: var(--bb-bg3);
+  color: var(--bb-text2);
+}
+
+[data-theme="bloomberg"] .detail-action-btn.danger:hover {
+  color: var(--bb-red);
+  background: rgba(255,51,51,0.1);
+}
+
+[data-theme="bloomberg"] .detail-close-btn {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .detail-close-btn:hover {
+  background: var(--bb-bg3);
+}
+
+[data-theme="bloomberg"] .detail-field-label {
+  color: var(--bb-text3);
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="bloomberg"] .detail-field-value {
+  border-color: var(--bb-border);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .detail-field-value .status-cell {
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .detail-updates {
+  border-top-color: var(--bb-border);
+}
+
+[data-theme="bloomberg"] .detail-updates h3 {
+  color: var(--bb-amber);
+  text-transform: uppercase;
+  font-size: 12px;
+  letter-spacing: 0.5px;
+}
+
+[data-theme="bloomberg"] .comment-input-area textarea {
+  background: var(--bb-bg3);
+  border-color: var(--bb-border);
+  color: var(--bb-green);
+  border-radius: 2px;
+  font-family: 'SF Mono', 'Consolas', monospace;
+  font-size: 12px;
+}
+
+[data-theme="bloomberg"] .comment-input-area textarea:focus {
+  border-color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .send-comment-btn {
+  background: var(--bb-amber);
+  color: #000;
+  border-radius: 2px;
+  font-family: inherit;
+  text-transform: uppercase;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+[data-theme="bloomberg"] .send-comment-btn:hover:not(:disabled) {
+  background: #e68a00;
+}
+
+[data-theme="bloomberg"] .comment-item {
+  background: var(--bb-bg3);
+  border-radius: 2px;
+  border-left: 2px solid var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .comment-date {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .comment-text {
+  color: var(--bb-text2);
+}
+
+/* ---- WORKFLOW MANAGER ---- */
+[data-theme="bloomberg"] .workflow-panel {
+  background: var(--bb-bg);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .workflow-header {
+  border-bottom-color: var(--bb-border);
+}
+
+[data-theme="bloomberg"] .workflow-header h2 {
+  color: var(--bb-amber);
+  font-family: 'SF Mono', 'Consolas', monospace;
+  text-transform: uppercase;
+  font-size: 16px;
+}
+
+[data-theme="bloomberg"] .wf-back-btn,
+[data-theme="bloomberg"] .wf-close-btn {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .wf-back-btn:hover,
+[data-theme="bloomberg"] .wf-close-btn:hover {
+  background: var(--bb-bg3);
+  color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .workflow-subtitle {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .wf-category-card {
+  background: var(--bb-bg2);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .wf-category-card:hover {
+  border-color: var(--bb-amber);
+  background: var(--bb-bg3);
+  box-shadow: 0 0 12px rgba(255,152,0,0.1);
+}
+
+[data-theme="bloomberg"] .wf-cat-icon {
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .wf-cat-info h3 {
+  color: var(--bb-white);
+  font-family: 'SF Mono', 'Consolas', monospace;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+[data-theme="bloomberg"] .wf-cat-info p {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .wf-cat-count {
+  background: rgba(255,152,0,0.15);
+  color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .wf-block-card {
+  background: var(--bb-bg2);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .wf-block-card:hover {
+  border-color: var(--bb-border2);
+  background: var(--bb-bg3);
+}
+
+[data-theme="bloomberg"] .wf-block-card.selected {
+  border-color: var(--bb-amber);
+  background: rgba(255,152,0,0.06);
+}
+
+[data-theme="bloomberg"] .wf-check-off {
+  border-color: var(--bb-border2);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .wf-check-on {
+  background: var(--bb-amber);
+  border-color: var(--bb-amber);
+  border-radius: 2px;
+  color: #000;
+}
+
+[data-theme="bloomberg"] .wf-block-info h4 {
+  color: var(--bb-white);
+}
+
+[data-theme="bloomberg"] .wf-block-info p {
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .wf-block-meta span {
+  background: var(--bb-bg);
+  color: var(--bb-text3);
+}
+
+[data-theme="bloomberg"] .wf-select-all-btn {
+  border-color: var(--bb-border);
+  color: var(--bb-text3);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .wf-select-all-btn:hover {
+  border-color: var(--bb-amber);
+  color: var(--bb-amber);
+}
+
+[data-theme="bloomberg"] .wf-create-bar {
+  border-top-color: var(--bb-border);
+  background: var(--bb-bg);
+}
+
+[data-theme="bloomberg"] .wf-create-btn {
+  background: var(--bb-amber);
+  color: #000;
+  border-radius: 2px;
+  font-family: inherit;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+[data-theme="bloomberg"] .wf-create-btn:hover {
+  background: #e68a00;
+}
+
+/* ---- MODAL ---- */
+[data-theme="bloomberg"] .modal-content {
+  background: var(--bb-bg);
+  border: 1px solid var(--bb-border);
+  border-radius: 2px;
+}
+
+[data-theme="bloomberg"] .modal-header {
+  border-bottom-color: var(--bb-border);
+}
+
+[data-theme="bloomberg"] .modal-header h3 {
+  color: var(--bb-amber);
+}
+
+/* ---- BLOOMBERG HEADER BAR ---- */
+[data-theme="bloomberg"] .board-header::after {
+  content: 'BLOOMBERG TERMINAL';
+  position: absolute;
+  top: 4px;
+  right: 24px;
+  font-size: 9px;
+  color: var(--bb-text3);
+  letter-spacing: 2px;
+  font-family: 'SF Mono', 'Consolas', monospace;
+}
+
+[data-theme="bloomberg"] .board-header {
+  position: relative;
+}

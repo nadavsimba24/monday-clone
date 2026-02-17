@@ -217,3 +217,82 @@
 .context-item.danger {
   color: #e2445c;
 }
+
+/* Sidebar spacer */
+.sidebar-spacer {
+  flex: 1;
+}
+
+/* Settings Panel */
+.settings-panel {
+  padding: 0 12px 12px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+  margin-top: 8px;
+}
+
+.settings-toggle-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 4px;
+  background: none;
+  border: none;
+  color: #9699a6;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.settings-toggle-btn:hover {
+  color: #fff;
+}
+
+.settings-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 4px 0;
+}
+
+.settings-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.settings-row label {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #9699a6;
+  letter-spacing: 0.5px;
+  padding: 0 2px;
+}
+
+.settings-btn-group {
+  display: flex;
+  gap: 4px;
+}
+
+.settings-toggle {
+  flex: 1;
+  padding: 5px 8px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 4px;
+  color: #9699a6;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.settings-toggle:hover {
+  background: rgba(255,255,255,0.1);
+  color: #d5d8df;
+}
+
+.settings-toggle.active {
+  background: #4caf82;
+  border-color: #4caf82;
+  color: #fff;
+  font-weight: 600;
+}

@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { useBoard } from '../../context/BoardContext';
-import { FiStar, FiSearch, FiPlus, FiMoreHorizontal } from 'react-icons/fi';
+import { useSettings } from '../../context/SettingsContext';
+import { FiStar, FiPlus } from 'react-icons/fi';
 import SearchBar from '../Common/SearchBar';
 
 export default function BoardHeader({ board, searchTerm, onSearchChange }) {
   const { dispatch } = useBoard();
+  const { t } = useSettings();
   const [editingName, setEditingName] = useState(false);
   const [name, setName] = useState(board.name);
   const inputRef = useRef();
@@ -61,13 +63,13 @@ export default function BoardHeader({ board, searchTerm, onSearchChange }) {
       <div className="board-header-actions">
         <button
           className="header-action-btn primary"
-          onClick={() => dispatch({ type: 'ADD_ITEM', boardId: board.id, groupId: board.groups[0]?.id, name: 'New Item' })}
+          onClick={() => dispatch({ type: 'ADD_ITEM', boardId: board.id, groupId: board.groups[0]?.id, name: t('newItem') })}
           disabled={!board.groups.length}
         >
-          <FiPlus size={14} /> New Item
+          <FiPlus size={14} /> {t('newItem')}
         </button>
         <div className="header-search">
-          <SearchBar value={searchTerm} onChange={onSearchChange} placeholder="Search items..." />
+          <SearchBar value={searchTerm} onChange={onSearchChange} placeholder={t('searchItems')} />
         </div>
       </div>
     </div>

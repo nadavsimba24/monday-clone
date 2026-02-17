@@ -1,0 +1,163 @@
+/* ============================================
+   RTL (Hebrew) Layout Overrides
+   ============================================ */
+
+[dir="rtl"] .app-layout {
+  direction: rtl;
+}
+
+/* Sidebar */
+[dir="rtl"] .sidebar {
+  border-left: none;
+  border-right: none;
+}
+
+[dir="rtl"] .board-item {
+  border-left: none;
+  border-right: 3px solid transparent;
+}
+
+[dir="rtl"] .board-item.active {
+  border-left-color: transparent;
+  border-right-color: #4caf82;
+}
+
+[data-theme="bloomberg"][dir="rtl"] .board-item.active {
+  border-right-color: var(--bb-amber);
+}
+
+[dir="rtl"] .collapse-btn {
+  right: auto;
+  left: -14px;
+}
+
+/* Board */
+[dir="rtl"] .item-name-cell {
+  border-right: none;
+  border-left: 1px solid #e6e9ef;
+}
+
+[data-theme="bloomberg"][dir="rtl"] .item-name-cell {
+  border-left-color: var(--bb-border);
+}
+
+[dir="rtl"] .item-cell {
+  border-right: none;
+  border-left: 1px solid #e6e9ef;
+}
+
+[data-theme="bloomberg"][dir="rtl"] .item-cell {
+  border-left-color: var(--bb-border);
+}
+
+[dir="rtl"] .summary-cell {
+  border-right: none;
+  border-left: 1px solid #e6e9ef;
+}
+
+[data-theme="bloomberg"][dir="rtl"] .summary-cell {
+  border-left-color: var(--bb-border);
+}
+
+[dir="rtl"] .group-column-headers {
+  margin-left: 0;
+  margin-right: 70px;
+}
+
+[dir="rtl"] .summary-count {
+  padding: 0 50px 0 10px;
+}
+
+[dir="rtl"] .group-color-bar {
+  order: -1;
+}
+
+/* Add column area */
+[dir="rtl"] .add-column-area {
+  right: auto;
+  left: 24px;
+}
+
+[dir="rtl"] .add-column-dropdown {
+  right: auto;
+  left: 0;
+}
+
+/* Text alignment */
+[dir="rtl"] .text-cell {
+  text-align: right;
+}
+
+[dir="rtl"] .text-cell-input {
+  text-align: right;
+}
+
+[dir="rtl"] .add-item-input {
+  text-align: right;
+}
+
+[dir="rtl"] .item-name-input {
+  text-align: right;
+}
+
+/* Detail panel */
+[dir="rtl"] .detail-overlay {
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .detail-panel {
+  box-shadow: 4px 0 20px rgba(0,0,0,0.15);
+}
+
+[data-theme="bloomberg"][dir="rtl"] .detail-panel {
+  border-left: 1px solid var(--bb-border);
+  border-right: none;
+}
+
+@keyframes slideInRTL {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+[dir="rtl"] .detail-panel {
+  animation: slideInRTL 0.2s ease-out;
+}
+
+/* Comment items */
+[data-theme="bloomberg"][dir="rtl"] .comment-item {
+  border-left: none;
+  border-right: 2px solid var(--bb-amber);
+}
+
+/* Bloomberg header */
+[data-theme="bloomberg"][dir="rtl"] .board-header::after {
+  right: auto;
+  left: 24px;
+}
+
+/* Number cells stay LTR for readability */
+[dir="rtl"] .number-cell {
+  direction: ltr;
+}
+
+[dir="rtl"] .number-input {
+  direction: ltr;
+}
+
+/* Search bar */
+[dir="rtl"] .search-bar {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .search-bar input {
+  text-align: right;
+}
+
+/* Sidebar search */
+[dir="rtl"] .sidebar-search {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .sidebar-search input {
+  text-align: right;
+}

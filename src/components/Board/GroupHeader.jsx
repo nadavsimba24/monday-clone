@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
 import { useBoard } from '../../context/BoardContext';
+import { useSettings } from '../../context/SettingsContext';
 import { FiChevronDown, FiChevronRight, FiTrash2, FiMoreHorizontal } from 'react-icons/fi';
 import ColorPicker from '../Common/ColorPicker';
 
 export default function GroupHeader({ group, boardId, itemCount, columns }) {
   const { dispatch } = useBoard();
+  const { t } = useSettings();
   const [editingTitle, setEditingTitle] = useState(false);
   const [title, setTitle] = useState(group.title);
   const [showMenu, setShowMenu] = useState(false);
@@ -70,7 +72,7 @@ export default function GroupHeader({ group, boardId, itemCount, columns }) {
           </span>
         )}
 
-        <span className="group-count">{itemCount} items</span>
+        <span className="group-count">{itemCount} {t('items')}</span>
 
         <div className="group-menu-wrapper" ref={menuRef}>
           <button className="group-menu-btn" onClick={() => setShowMenu(!showMenu)}>
@@ -80,7 +82,7 @@ export default function GroupHeader({ group, boardId, itemCount, columns }) {
             <div className="group-menu-dropdown">
               <div className="dropdown-option" onClick={() => { setShowColorPicker(true); setShowMenu(false); }}>
                 <span className="option-color" style={{ backgroundColor: group.color }} />
-                Change color
+                {t('changeColor')}
               </div>
               <div
                 className="dropdown-option"
@@ -91,7 +93,7 @@ export default function GroupHeader({ group, boardId, itemCount, columns }) {
                 }}
               >
                 <FiTrash2 size={14} />
-                Delete group
+                {t('deleteGroup')}
               </div>
             </div>
           )}

@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { useBoard } from '../../context/BoardContext';
+import { useSettings } from '../../context/SettingsContext';
 import { WORKFLOW_CATEGORIES, WORKFLOW_BLOCKS, createBoardFromBlock } from '../../data/workflowTemplates';
+import { WORKFLOW_CATEGORY_LABELS, WORKFLOW_CATEGORY_DESCRIPTIONS } from '../../i18n/translations';
 import { FiArrowLeft, FiCheck, FiPlus, FiX } from 'react-icons/fi';
 import './Workflow.css';
 
 export default function WorkflowManager({ onClose }) {
   const { dispatch } = useBoard();
+  const { t, lang } = useSettings();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedBlocks, setSelectedBlocks] = useState(new Set());
   const [step, setStep] = useState('categories'); // 'categories' | 'blocks' | 'confirm'
@@ -74,8 +77,8 @@ export default function WorkflowManager({ onClose }) {
             )}
             <h2>
               {step === 'categories'
-                ? 'Workflow Manager'
-                : selectedCategory?.icon + ' ' + selectedCategory?.name + ' Workflows'}
+                ? t('workflowTitle')
+                : selectedCategory?.icon + ' ' + (lang === 'he' ? (WORKFLOW_CATEGORY_LABELS.he[selectedCategory?.name] || selectedCategory?.name) : selectedCategory?.name) + ' ' + t('workflows')}
             </h2>
           </div>
           <button className="wf-close-btn" onClick={onClose}>
@@ -86,7 +89,7 @@ export default function WorkflowManager({ onClose }) {
         {step === 'categories' && (
           <>
             <p className="workflow-subtitle">
-              Choose an industry to get pre-built workflow boards with building blocks tailored to your needs.
+              {t('workflowSubtitle')}
             </p>
             <div className="wf-categories-grid">
               {WORKFLOW_CATEGORIES.map((cat) => (
@@ -99,11 +102,11 @@ export default function WorkflowManager({ onClose }) {
                     {cat.icon}
                   </div>
                   <div className="wf-cat-info">
-                    <h3>{cat.name}</h3>
-                    <p>{cat.description}</p>
+                    <h3>{lang === 'he' ? (WORKFLOW_CATEGORY_LABELS.he[cat.name] || cat.name) : cat.name}</h3>
+                    <p>{lang === 'he' ? (WORKFLOW_CATEGORY_DESCRIPTIONS.he[cat.id] || cat.description) : cat.description}</p>
                   </div>
                   <div className="wf-cat-count">
-                    {(WORKFLOW_BLOCKS[cat.id] || []).length} workflows
+                    {(WORKFLOW_BLOCKS[cat.id] || []).length} {t('workflows')}
                   </div>
                 </div>
               ))}
@@ -114,14 +117,14 @@ export default function WorkflowManager({ onClose }) {
         {step === 'blocks' && (
           <>
             <p className="workflow-subtitle">
-              Select the workflow building blocks you want to add as boards. Mix and match to fit your needs.
+              {t('selectBlocks')}
             </p>
             <div className="wf-blocks-actions">
               <button className="wf-select-all-btn" onClick={handleSelectAll}>
-                {selectedBlocks.size === blocks.length ? 'Deselect All' : 'Select All'}
+                {selectedBlocks.size === blocks.length ? t('deselectAll') : t('selectAll')}
               </button>
               <span className="wf-selected-count">
-                {selectedBlocks.size} of {blocks.length} selected
+                {selectedBlocks.size} {t('of')} {blocks.length} {t('selected')}
               </span>
             </div>
             <div className="wf-blocks-grid">
@@ -144,10 +147,10 @@ export default function WorkflowManager({ onClose }) {
                       <h4>{block.name}</h4>
                       <p>{block.description}</p>
                       <div className="wf-block-meta">
-                        <span>{block.groups.length} groups</span>
-                        <span>{block.columns.length} columns</span>
+                        <span>{block.groups.length} {t('groups')}</span>
+                        <span>{block.columns.length} {t('columns')}</span>
                         <span>
-                          {block.groups.reduce((sum, g) => sum + g.items.length, 0)} items
+                          {block.groups.reduce((sum, g) => sum + g.items.length, 0)} {t('items')}
                         </span>
                       </div>
                     </div>
@@ -158,7 +161,7 @@ export default function WorkflowManager({ onClose }) {
             {selectedBlocks.size > 0 && (
               <div className="wf-create-bar">
                 <button className="wf-create-btn" onClick={handleCreate}>
-                  <FiPlus /> Create {selectedBlocks.size} Board{selectedBlocks.size > 1 ? 's' : ''}
+                  <FiPlus /> {t('createBoards')} {selectedBlocks.size} {selectedBlocks.size > 1 ? t('boards') : t('board')}
                 </button>
               </div>
             )}

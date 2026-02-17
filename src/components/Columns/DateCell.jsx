@@ -1,6 +1,8 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSettings } from '../../context/SettingsContext';
 
 export default function DateCell({ value, onChange }) {
+  const { t, lang } = useSettings();
   const [open, setOpen] = useState(false);
   const ref = useRef();
 
@@ -15,7 +17,8 @@ export default function DateCell({ value, onChange }) {
   function formatDate(d) {
     if (!d) return '';
     const date = new Date(d);
-    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    const locale = lang === 'he' ? 'he-IL' : 'en-US';
+    return date.toLocaleDateString(locale, { month: 'short', day: 'numeric' });
   }
 
   function isOverdue(d) {
@@ -41,7 +44,7 @@ export default function DateCell({ value, onChange }) {
           />
           {value && (
             <button className="clear-date" onClick={() => { onChange(''); setOpen(false); }}>
-              Clear date
+              {t('clearDate')}
             </button>
           )}
         </div>

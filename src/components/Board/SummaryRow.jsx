@@ -1,6 +1,8 @@
 import { STATUS_OPTIONS, PRIORITY_OPTIONS } from '../../data/defaultData';
+import { useSettings } from '../../context/SettingsContext';
 
 export default function SummaryRow({ items, columns, groupColor }) {
+  const { t } = useSettings();
   function getSummary(column) {
     const vals = items.map((i) => i.values[column.id]).filter(Boolean);
     if (!vals.length) return null;
@@ -66,7 +68,7 @@ export default function SummaryRow({ items, columns, groupColor }) {
   return (
     <div className="summary-row">
       <div className="group-color-bar" style={{ backgroundColor: groupColor, opacity: 0.3 }} />
-      <div className="summary-count">{items.length} item{items.length !== 1 ? 's' : ''}</div>
+      <div className="summary-count">{items.length} {items.length !== 1 ? t('items') : t('item')}</div>
       {columns.map((col) => (
         <div key={col.id} className="summary-cell" style={{ width: col.width, minWidth: col.width }}>
           {getSummary(col)}

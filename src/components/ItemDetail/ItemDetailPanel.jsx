@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useBoard } from '../../context/BoardContext';
+import { useSettings } from '../../context/SettingsContext';
 import { FiX, FiTrash2, FiCopy, FiSend } from 'react-icons/fi';
 import StatusCell from '../Columns/StatusCell';
 import PriorityCell from '../Columns/PriorityCell';
@@ -20,6 +21,7 @@ const CELL_MAP = {
 
 export default function ItemDetailPanel({ item, groupId, boardId, onClose }) {
   const { state, dispatch } = useBoard();
+  const { t, lang } = useSettings();
   const [commentText, setCommentText] = useState('');
   const board = state.boards.find((b) => b.id === boardId);
   if (!board) return null;
@@ -54,10 +56,10 @@ export default function ItemDetailPanel({ item, groupId, boardId, onClose }) {
         <div className="detail-header">
           <h2 className="detail-title">{currentItem.name}</h2>
           <div className="detail-actions">
-            <button className="detail-action-btn" onClick={handleDuplicate} title="Duplicate">
+            <button className="detail-action-btn" onClick={handleDuplicate} title={t('duplicate')}>
               <FiCopy />
             </button>
-            <button className="detail-action-btn danger" onClick={handleDelete} title="Delete">
+            <button className="detail-action-btn danger" onClick={handleDelete} title={t('delete')}>
               <FiTrash2 />
             </button>
             <button className="detail-close-btn" onClick={onClose}>
@@ -89,12 +91,12 @@ export default function ItemDetailPanel({ item, groupId, boardId, onClose }) {
         </div>
 
         <div className="detail-updates">
-          <h3>Updates</h3>
+          <h3>{t('updates')}</h3>
           <div className="comment-input-area">
             <textarea
               value={commentText}
               onChange={(e) => setCommentText(e.target.value)}
-              placeholder="Write an update..."
+              placeholder={t('writeUpdate')}
               rows={3}
             />
             <button
@@ -102,14 +104,14 @@ export default function ItemDetailPanel({ item, groupId, boardId, onClose }) {
               onClick={handleAddComment}
               disabled={!commentText.trim()}
             >
-              <FiSend /> Send
+              <FiSend /> {t('send')}
             </button>
           </div>
           <div className="comments-list">
             {(currentItem.comments || []).slice().reverse().map((comment) => (
               <div key={comment.id} className="comment-item">
                 <div className="comment-date">
-                  {new Date(comment.date).toLocaleDateString('en-US', {
+                  {new Date(comment.date).toLocaleDateString(lang === 'he' ? 'he-IL' : 'en-US', {
                     month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
                   })}
                 </div>

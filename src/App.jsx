@@ -1,9 +1,12 @@
 import { useState } from 'react';
 import { BoardProvider, useBoard } from './context/BoardContext';
+import { SettingsProvider } from './context/SettingsContext';
 import Sidebar from './components/Sidebar/Sidebar';
 import BoardView from './components/Board/BoardView';
 import ItemDetailPanel from './components/ItemDetail/ItemDetailPanel';
 import './App.css';
+import './themes/bloomberg.css';
+import './themes/rtl.css';
 
 function MainArea() {
   const { state } = useBoard();
@@ -26,11 +29,13 @@ function MainArea() {
 
 export default function App() {
   return (
-    <BoardProvider>
-      <div className="app-layout">
-        <Sidebar />
-        <MainArea />
-      </div>
-    </BoardProvider>
+    <SettingsProvider>
+      <BoardProvider>
+        <div className="app-layout">
+          <Sidebar />
+          <MainArea />
+        </div>
+      </BoardProvider>
+    </SettingsProvider>
   );
 }

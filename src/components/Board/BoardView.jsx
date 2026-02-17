@@ -1,5 +1,6 @@
 import { useState, useCallback } from 'react';
 import { useBoard } from '../../context/BoardContext';
+import { useSettings } from '../../context/SettingsContext';
 import BoardHeader from './BoardHeader';
 import Group from './Group';
 import { FiPlus, FiTrash2, FiCopy, FiArrowRight } from 'react-icons/fi';
@@ -8,6 +9,7 @@ import './Board.css';
 
 export default function BoardView({ onOpenDetail }) {
   const { state, dispatch } = useBoard();
+  const { t, tColumnType } = useSettings();
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedItems, setSelectedItems] = useState(new Set());
   const [showAddColumn, setShowAddColumn] = useState(false);
@@ -27,13 +29,13 @@ export default function BoardView({ onOpenDetail }) {
   if (!board) {
     return (
       <div className="board-empty-state">
-        <h2>No board selected</h2>
-        <p>Create a new board or select one from the sidebar.</p>
+        <h2>{t('noBoardSelected')}</h2>
+        <p>{t('noBoardDesc')}</p>
         <button
           className="btn-primary"
-          onClick={() => dispatch({ type: 'ADD_BOARD', name: 'New Board' })}
+          onClick={() => dispatch({ type: 'ADD_BOARD', name: t('newItem') })}
         >
-          <FiPlus /> Create Board
+          <FiPlus /> {t('createBoard')}
         </button>
       </div>
     );
@@ -77,7 +79,7 @@ export default function BoardView({ onOpenDetail }) {
       type: 'ADD_COLUMN',
       boardId: board.id,
       columnType: type,
-      title: COLUMN_TYPES[type].label,
+      title: tColumnType(type),
       width: COLUMN_TYPES[type].width,
     });
     setShowAddColumn(false);
@@ -89,13 +91,13 @@ export default function BoardView({ onOpenDetail }) {
 
       {selectedItems.size > 0 && (
         <div className="bulk-actions-bar">
-          <span className="bulk-count">{selectedItems.size} selected</span>
+          <span className="bulk-count">{selectedItems.size} {t('selected')}</span>
           <button className="bulk-btn" onClick={handleBulkDuplicate}>
-            <FiCopy size={14} /> Duplicate
+            <FiCopy size={14} /> {t('duplicate')}
           </button>
           <div className="bulk-move-wrapper">
             <button className="bulk-btn" onClick={() => setShowMoveMenu(!showMoveMenu)}>
-              <FiArrowRight size={14} /> Move to
+              <FiArrowRight size={14} /> {t('moveTo')}
             </button>
             {showMoveMenu && (
               <div className="bulk-move-dropdown">
@@ -109,10 +111,10 @@ export default function BoardView({ onOpenDetail }) {
             )}
           </div>
           <button className="bulk-btn danger" onClick={handleBulkDelete}>
-            <FiTrash2 size={14} /> Delete
+            <FiTrash2 size={14} /> {t('delete')}
           </button>
           <button className="bulk-btn" onClick={() => setSelectedItems(new Set())}>
-            Clear
+            {t('clear')}
           </button>
         </div>
       )}
@@ -135,7 +137,7 @@ export default function BoardView({ onOpenDetail }) {
           className="add-group-btn"
           onClick={() => dispatch({ type: 'ADD_GROUP', boardId: board.id })}
         >
-          <FiPlus size={14} /> Add new group
+          <FiPlus size={14} /> {t('addNewGroup')}
         </button>
       </div>
 
@@ -145,9 +147,9 @@ export default function BoardView({ onOpenDetail }) {
         </button>
         {showAddColumn && (
           <div className="add-column-dropdown">
-            {Object.entries(COLUMN_TYPES).map(([type, info]) => (
+            {Object.entries(COLUMN_TYPES).map(([type]) => (
               <div key={type} className="dropdown-option" onClick={() => handleAddColumn(type)}>
-                {info.label}
+                {tColumnType(type)}
               </div>
             ))}
           </div>

@@ -1,15 +1,18 @@
 import { useState } from 'react';
 import { useBoard } from '../../context/BoardContext';
-import { FiPlus, FiStar, FiTrash2, FiCopy, FiChevronLeft, FiChevronRight, FiSearch, FiGrid, FiLayers } from 'react-icons/fi';
+import { useSettings } from '../../context/SettingsContext';
+import { FiPlus, FiStar, FiTrash2, FiCopy, FiChevronLeft, FiChevronRight, FiSearch, FiGrid, FiLayers, FiSettings } from 'react-icons/fi';
 import WorkflowManager from '../Workflow/WorkflowManager';
 import './Sidebar.css';
 
 export default function Sidebar() {
   const { state, dispatch } = useBoard();
+  const { t, lang, setLang, theme, setTheme, isRTL } = useSettings();
   const [collapsed, setCollapsed] = useState(false);
   const [search, setSearch] = useState('');
   const [contextMenu, setContextMenu] = useState(null);
   const [showWorkflows, setShowWorkflows] = useState(false);
+  const [showSettings, setShowSettings] = useState(false);
 
   const favorites = state.boards.filter((b) => b.favorite);
   const filtered = state.boards.filter((b) =>
@@ -17,7 +20,7 @@ export default function Sidebar() {
   );
 
   function handleAddBoard() {
-    dispatch({ type: 'ADD_BOARD', name: 'New Board' });
+    dispatch({ type: 'ADD_BOARD', name: lang === 'he' ? 'לוח חדש' : 'New Board' });
   }
 
   function handleContextMenu(e, board) {
@@ -33,14 +36,14 @@ export default function Sidebar() {
             <div className="sidebar-header">
               <div className="workspace-name">
                 <div className="workspace-icon">M</div>
-                <span>My Workspace</span>
+                <span>{t('myWorkspace')}</span>
               </div>
             </div>
 
             <div className="sidebar-search">
               <FiSearch />
               <input
-                placeholder="Search boards..."
+                placeholder={t('searchBoards')}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
@@ -49,14 +52,14 @@ export default function Sidebar() {
             <div className="sidebar-workflow-btn-wrapper">
               <button className="sidebar-workflow-btn" onClick={() => setShowWorkflows(true)}>
                 <FiLayers size={15} />
-                <span>Workflow Manager</span>
+                <span>{t('workflowManager')}</span>
               </button>
             </div>
 
             {favorites.length > 0 && !search && (
               <div className="sidebar-section">
                 <div className="section-title">
-                  <FiStar size={12} /> Favorites
+                  <FiStar size={12} /> {t('favorites')}
                 </div>
                 {favorites.map((board) => (
                   <div
@@ -74,8 +77,8 @@ export default function Sidebar() {
 
             <div className="sidebar-section">
               <div className="section-title-row">
-                <span className="section-title">Boards</span>
-                <button className="add-board-btn" onClick={handleAddBoard} title="Add board">
+                <span className="section-title">{t('boards')}</span>
+                <button className="add-board-btn" onClick={handleAddBoard} title={t('addBoard')}>
                   <FiPlus size={14} />
                 </button>
               </div>
@@ -92,11 +95,65 @@ export default function Sidebar() {
                 </div>
               ))}
             </div>
+
+            <div className="sidebar-spacer" />
+
+            <div className="settings-panel">
+              <button
+                className="settings-toggle-btn"
+                onClick={() => setShowSettings(!showSettings)}
+              >
+                <FiSettings size={14} />
+                <span>{t('settings')}</span>
+              </button>
+
+              {showSettings && (
+                <div className="settings-content">
+                  <div className="settings-row">
+                    <label>{t('language')}</label>
+                    <div className="settings-btn-group">
+                      <button
+                        className={`settings-toggle ${lang === 'en' ? 'active' : ''}`}
+                        onClick={() => setLang('en')}
+                      >
+                        {t('english')}
+                      </button>
+                      <button
+                        className={`settings-toggle ${lang === 'he' ? 'active' : ''}`}
+                        onClick={() => setLang('he')}
+                      >
+                        {t('hebrew')}
+                      </button>
+                    </div>
+                  </div>
+                  <div className="settings-row">
+                    <label>{t('theme')}</label>
+                    <div className="settings-btn-group">
+                      <button
+                        className={`settings-toggle ${theme === 'default' ? 'active' : ''}`}
+                        onClick={() => setTheme('default')}
+                      >
+                        {t('defaultTheme')}
+                      </button>
+                      <button
+                        className={`settings-toggle ${theme === 'bloomberg' ? 'active' : ''}`}
+                        onClick={() => setTheme('bloomberg')}
+                      >
+                        {t('bloomberg')}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
           </>
         )}
 
         <button className="collapse-btn" onClick={() => setCollapsed(!collapsed)}>
-          {collapsed ? <FiChevronRight /> : <FiChevronLeft />}
+          {collapsed
+            ? (isRTL ? <FiChevronLeft /> : <FiChevronRight />)
+            : (isRTL ? <FiChevronRight /> : <FiChevronLeft />)
+          }
         </button>
       </div>
 
@@ -118,7 +175,7 @@ export default function Sidebar() {
               }}
             >
               <FiStar size={14} />
-              {contextMenu.board.favorite ? 'Remove from favorites' : 'Add to favorites'}
+              {contextMenu.board.favorite ? t('removeFromFavorites') : t('addToFavorites')}
             </div>
             <div
               className="context-item"
@@ -128,7 +185,7 @@ export default function Sidebar() {
               }}
             >
               <FiCopy size={14} />
-              Duplicate board
+              {t('duplicateBoard')}
             </div>
             <div
               className="context-item danger"
@@ -138,7 +195,7 @@ export default function Sidebar() {
               }}
             >
               <FiTrash2 size={14} />
-              Delete board
+              {t('deleteBoard')}
             </div>
           </div>
         </div>

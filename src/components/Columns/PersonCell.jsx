@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from 'react';
 import { useBoard } from '../../context/BoardContext';
+import { useSettings } from '../../context/SettingsContext';
 
 export default function PersonCell({ value, onChange }) {
   const { state } = useBoard();
+  const { t } = useSettings();
   const [open, setOpen] = useState(false);
   const ref = useRef();
   const person = state.people.find((p) => p.id === value);
@@ -45,7 +47,7 @@ export default function PersonCell({ value, onChange }) {
           ))}
           {value && (
             <div className="dropdown-option clear-option" onClick={() => { onChange(''); setOpen(false); }}>
-              Clear
+              {t('clear')}
             </div>
           )}
         </div>

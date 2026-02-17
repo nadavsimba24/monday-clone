@@ -1,7 +1,9 @@
 import { useState, useRef, useEffect } from 'react';
+import { useSettings } from '../../context/SettingsContext';
 import { FiPlus } from 'react-icons/fi';
 
 export default function AddItem({ groupColor, onAdd }) {
+  const { t } = useSettings();
   const [adding, setAdding] = useState(false);
   const [name, setName] = useState('');
   const inputRef = useRef();
@@ -27,7 +29,7 @@ export default function AddItem({ groupColor, onAdd }) {
           ref={inputRef}
           className="add-item-input"
           value={name}
-          placeholder="Enter item name..."
+          placeholder={t('enterItemName')}
           onChange={(e) => setName(e.target.value)}
           onBlur={handleAdd}
           onKeyDown={(e) => {
@@ -43,7 +45,7 @@ export default function AddItem({ groupColor, onAdd }) {
     <div className="add-item-row add-item-trigger" onClick={() => setAdding(true)}>
       <div className="group-color-bar" style={{ backgroundColor: groupColor, opacity: 0.4 }} />
       <div className="item-checkbox-area" />
-      <span className="add-item-text"><FiPlus size={12} /> Add item</span>
+      <span className="add-item-text"><FiPlus size={12} /> {t('addItem')}</span>
     </div>
   );
 }
