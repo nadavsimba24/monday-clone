@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import crypto from 'crypto';
 
 function env(name, fallback = undefined) {
   const v = process.env[name];
@@ -13,6 +14,77 @@ const AgentResponseSchema = z.object({
   message: z.string().default(''),
   actions: z.array(ActionSchema).default([]),
 });
+
+const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+function newId() {
+  return crypto.randomUUID();
+}
+function asUuid(maybe) {
+  return (typeof maybe === 'string' && UUID_RE.test(maybe)) ? maybe : newId();
+}
+
+function normalizeBoard(board) {
+  const b = board && typeof board === 'object' ? board : {};
+  const columnsIn = Array.isArray(b.columns) ? b.columns : [];
+  const groupsIn = Array.isArray(b.groups) ? b.groups : [];
+
+  const columns = columnsIn.map((c) => ({
+    id: asUuid(c?.id),
+    type: typeof c?.type === 'string' ? c.type : 'text',
+    title: typeof c?.title === 'string' ? c.title : 'Column',
+    width: Number.isFinite(c?.width) ? c.width : 140,
+  }));
+
+  const colIds = new Set(columns.map((c) => c.id));
+
+  const groups = groupsIn.map((g) => {
+    const itemsIn = Array.isArray(g?.items) ? g.items : [];
+    const items = itemsIn.map((it) => {
+      const values = (it?.values && typeof it.values === 'object') ? it.values : (it?.columnValues && typeof it.columnValues === 'object' ? it.columnValues : {});
+      // keep only values whose column exists
+      const safeValues = {};
+      for (const [k, v] of Object.entries(values)) {
+        if (colIds.has(k)) safeValues[k] = v;
+      }
+      return {
+        id: asUuid(it?.id),
+        name: typeof it?.name === 'string' ? it.name : 'New Item',
+        values: safeValues,
+      };
+    });
+
+    return {
+      id: asUuid(g?.id),
+      title: typeof g?.title === 'string' ? g.title : 'Group',
+      color: typeof g?.color === 'string' ? g.color : '#4caf82',
+      collapsed: Boolean(g?.collapsed) || false,
+      items,
+    };
+  });
+
+  return {
+    id: asUuid(b.id),
+    name: typeof b.name === 'string' ? b.name : 'New Board',
+    favorite: Boolean(b.favorite) || false,
+    columns: columns.length ? columns : [
+      { id: newId(), type: 'status', title: 'Status', width: 140 },
+    ],
+    groups: groups.length ? groups : [
+      { id: newId(), title: 'Group 1', color: '#4caf82', collapsed: false, items: [] },
+    ],
+  };
+}
+
+function normalizeActions(actions) {
+  if (!Array.isArray(actions)) return [];
+  return actions.map((a) => {
+    if (!a || typeof a !== 'object' || typeof a.type !== 'string') return null;
+    if (a.type === 'ADD_BOARD_DIRECT') {
+      return { ...a, board: normalizeBoard(a.board) };
+    }
+    return a;
+  }).filter(Boolean);
+}
 
 export async function runMeshkalWeave46({ prompt, state }) {
   const apiKey = env('DEEPSEEK_API_KEY');
@@ -50,7 +122,7 @@ Allowed actions (client will dispatch into a reducer):
 
 Rules:
 - Prefer ADD_BOARD_DIRECT when creating a full new board with columns+groups+items.
-- Use UUID v4 strings for new ids you create.
+- Use UUID v4 strings for new ids you create. (If you are unsure, omit ids and the server will generate them.)
 - Do not invent unknown action types.
 - Keep actions minimal.
 `;
@@ -111,5 +183,6 @@ Rules:
   }
 
   const safe = AgentResponseSchema.parse(parsed);
+  safe.actions = normalizeActions(safe.actions);
   return safe;
 }
