@@ -1,16 +1,26 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useBoard } from '../../context/BoardContext';
 import { useSettings } from '../../context/SettingsContext';
-import { FiPlus, FiStar, FiTrash2, FiCopy, FiChevronLeft, FiChevronRight, FiSearch, FiGrid, FiLayers, FiSettings, FiDownload, FiUpload, FiActivity } from 'react-icons/fi';
+import {
+  FiChevronLeft,
+  FiChevronRight,
+  FiCopy,
+  FiGrid,
+  FiLayers,
+  FiPlus,
+  FiSearch,
+  FiSettings,
+  FiStar,
+  FiTrash2,
+} from 'react-icons/fi';
 import WorkflowManager from '../Workflow/WorkflowManager';
 import ActivityLogModal from '../Activity/ActivityLogModal';
 import N8nWorkflowsModal from '../N8n/N8nWorkflowsModal';
-import AIAssistantModal from '../AI/AIAssistantModal';
-import './Sidebar.css';
 
 export default function Sidebar() {
   const { state, dispatch } = useBoard();
   const { t, lang, setLang, theme, setTheme, isRTL } = useSettings();
+
   const [collapsed, setCollapsed] = useState(false);
   const [search, setSearch] = useState('');
   const [contextMenu, setContextMenu] = useState(null);
@@ -18,7 +28,8 @@ export default function Sidebar() {
   const [showSettings, setShowSettings] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
   const [showN8n, setShowN8n] = useState(false);
-  const [showAI, setShowAI] = useState(false);
+
+  const fileInputRef = useRef(null);
 
   const favorites = state.boards.filter((b) => b.favorite);
   const filtered = state.boards.filter((b) =>
@@ -62,113 +73,125 @@ export default function Sidebar() {
 
   return (
     <>
-      <div className={`sidebar ${collapsed ? 'collapsed' : ''}`}>
+      <div
+        className={`relative h-screen ${collapsed ? 'w-16' : 'w-[280px]'} shrink-0 bg-white border-r border-cu-border flex flex-col`}
+      >
         {!collapsed && (
           <>
-            <div className="sidebar-header">
-              <div className="workspace-name">
-                <div className="workspace-icon">M</div>
-                <span>{t('myWorkspace')}</span>
+            <div className="px-4 py-4">
+              <div className="flex items-center gap-2">
+                <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-cu-primary to-cu-primary2 text-white flex items-center justify-center font-bold">
+                  M
+                </div>
+                <div className="font-semibold text-sm text-cu-text">{t('myWorkspace')}</div>
               </div>
-            </div>
 
-            <div className="sidebar-search">
-              <FiSearch />
-              <input
-                placeholder={t('searchBoards')}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-            </div>
+              <div className="mt-3 flex items-center gap-2 px-3 py-2 border border-cu-border rounded-cu bg-white">
+                <FiSearch className="text-cu-muted" />
+                <input
+                  className="w-full outline-none text-sm"
+                  placeholder={t('searchBoards')}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              </div>
 
-            <div className="sidebar-workflow-btn-wrapper">
-              <button className="sidebar-workflow-btn" onClick={() => setShowWorkflows(true)}>
+              <button
+                className="mt-3 w-full inline-flex items-center justify-center gap-2 px-3 py-2 rounded-cu bg-cu-primary text-white text-sm font-semibold hover:opacity-95"
+                onClick={() => setShowWorkflows(true)}
+              >
                 <FiLayers size={15} />
-                <span>{t('workflowManager')}</span>
+                {t('workflowManager')}
               </button>
             </div>
 
             {favorites.length > 0 && !search && (
-              <div className="sidebar-section">
-                <div className="section-title">
+              <div className="px-2 pb-2">
+                <div className="px-2 py-2 text-[11px] uppercase tracking-wide text-cu-muted flex items-center gap-2">
                   <FiStar size={12} /> {t('favorites')}
                 </div>
                 {favorites.map((board) => (
                   <div
                     key={board.id}
-                    className={`board-item ${state.activeBoardId === board.id ? 'active' : ''}`}
+                    className={`mx-1 px-2 py-2 rounded-cu cursor-pointer flex items-center gap-2 text-sm ${state.activeBoardId === board.id ? 'bg-cu-bg' : 'hover:bg-cu-bg'}`}
                     onClick={() => dispatch({ type: 'SET_ACTIVE_BOARD', boardId: board.id })}
                     onContextMenu={(e) => handleContextMenu(e, board)}
                   >
-                    <FiGrid size={14} />
-                    <span>{board.name}</span>
+                    <FiGrid size={14} className="text-cu-muted" />
+                    <span className="flex-1 truncate">{board.name}</span>
                   </div>
                 ))}
               </div>
             )}
 
-            <div className="sidebar-section">
-              <div className="section-title-row">
-                <span className="section-title">{t('boards')}</span>
-                <button className="add-board-btn" onClick={handleAddBoard} title={t('addBoard')}>
-                  <FiPlus size={14} />
+            <div className="px-2 pb-2">
+              <div className="px-3 py-2 flex items-center justify-between">
+                <div className="text-[11px] uppercase tracking-wide text-cu-muted">{t('boards')}</div>
+                <button
+                  className="h-8 w-8 inline-flex items-center justify-center rounded-cu border border-cu-border hover:bg-cu-bg"
+                  onClick={handleAddBoard}
+                  title={t('addBoard')}
+                >
+                  <FiPlus size={15} />
                 </button>
               </div>
+
               {filtered.map((board) => (
                 <div
                   key={board.id}
-                  className={`board-item ${state.activeBoardId === board.id ? 'active' : ''}`}
+                  className={`mx-1 px-2 py-2 rounded-cu cursor-pointer flex items-center gap-2 text-sm ${state.activeBoardId === board.id ? 'bg-cu-bg' : 'hover:bg-cu-bg'}`}
                   onClick={() => dispatch({ type: 'SET_ACTIVE_BOARD', boardId: board.id })}
                   onContextMenu={(e) => handleContextMenu(e, board)}
                 >
-                  <FiGrid size={14} />
-                  <span>{board.name}</span>
-                  {board.favorite && <FiStar size={12} className="fav-icon" />}
+                  <FiGrid size={14} className="text-cu-muted" />
+                  <span className="flex-1 truncate">{board.name}</span>
+                  {board.favorite && <FiStar size={12} className="text-yellow-500" />}
                 </div>
               ))}
             </div>
 
-            <div className="sidebar-spacer" />
+            <div className="flex-1" />
 
-            <div className="settings-panel">
+            <div className="px-4 pb-4 border-t border-cu-border">
               <button
-                className="settings-toggle-btn"
-                onClick={() => setShowSettings(!showSettings)}
+                className="mt-3 w-full inline-flex items-center gap-2 px-3 py-2 rounded-cu border border-cu-border hover:bg-cu-bg text-sm"
+                onClick={() => setShowSettings((v) => !v)}
               >
-                <FiSettings size={14} />
+                <FiSettings size={14} className="text-cu-muted" />
                 <span>{t('settings')}</span>
               </button>
 
               {showSettings && (
-                <div className="settings-content">
-                  <div className="settings-row">
-                    <label>{t('language')}</label>
-                    <div className="settings-btn-group">
+                <div className="mt-3 space-y-3">
+                  <div>
+                    <div className="text-[11px] uppercase tracking-wide text-cu-muted mb-1">{t('language')}</div>
+                    <div className="grid grid-cols-2 gap-2">
                       <button
-                        className={`settings-toggle ${lang === 'en' ? 'active' : ''}`}
+                        className={`px-2 py-2 rounded-cu border text-sm ${lang === 'en' ? 'border-cu-primary text-cu-primary' : 'border-cu-border hover:bg-cu-bg'}`}
                         onClick={() => setLang('en')}
                       >
                         {t('english')}
                       </button>
                       <button
-                        className={`settings-toggle ${lang === 'he' ? 'active' : ''}`}
+                        className={`px-2 py-2 rounded-cu border text-sm ${lang === 'he' ? 'border-cu-primary text-cu-primary' : 'border-cu-border hover:bg-cu-bg'}`}
                         onClick={() => setLang('he')}
                       >
                         {t('hebrew')}
                       </button>
                     </div>
                   </div>
-                  <div className="settings-row">
-                    <label>{t('theme')}</label>
-                    <div className="settings-btn-group">
+
+                  <div>
+                    <div className="text-[11px] uppercase tracking-wide text-cu-muted mb-1">{t('theme')}</div>
+                    <div className="grid grid-cols-2 gap-2">
                       <button
-                        className={`settings-toggle ${theme === 'default' ? 'active' : ''}`}
+                        className={`px-2 py-2 rounded-cu border text-sm ${theme === 'default' ? 'border-cu-primary text-cu-primary' : 'border-cu-border hover:bg-cu-bg'}`}
                         onClick={() => setTheme('default')}
                       >
                         {t('defaultTheme')}
                       </button>
                       <button
-                        className={`settings-toggle ${theme === 'bloomberg' ? 'active' : ''}`}
+                        className={`px-2 py-2 rounded-cu border text-sm ${theme === 'bloomberg' ? 'border-cu-primary text-cu-primary' : 'border-cu-border hover:bg-cu-bg'}`}
                         onClick={() => setTheme('bloomberg')}
                       >
                         {t('bloomberg')}
@@ -176,101 +199,90 @@ export default function Sidebar() {
                     </div>
                   </div>
 
-                  <div className="settings-divider" />
+                  <div className="h-px bg-cu-border" />
 
-                  <div className="settings-row">
-                    <label>{t('activityLog')}</label>
-                    <button className="settings-action-btn" onClick={() => setShowActivity(true)}>
-                      <FiActivity size={14} />
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      className="px-2 py-2 rounded-cu border border-cu-border hover:bg-cu-bg text-sm"
+                      onClick={() => setShowActivity(true)}
+                    >
                       {t('activityLog')}
                     </button>
-                  </div>
-
-                  <div className="settings-row">
-                    <label>{t('n8n')}</label>
-                    <button className="settings-action-btn" onClick={() => setShowN8n(true)}>
+                    <button
+                      className="px-2 py-2 rounded-cu border border-cu-border hover:bg-cu-bg text-sm"
+                      onClick={() => setShowN8n(true)}
+                    >
                       {t('n8nWorkflows')}
                     </button>
                   </div>
 
-                  <div className="settings-row">
-                    <label>AI</label>
-                    <button className="settings-action-btn" onClick={() => setShowAI(true)}>
-                      {t('aiAssistantTitle')}
-                    </button>
-                  </div>
-
-                  <div className="settings-row">
-                    <label>{t('exportData')}</label>
-                    <button className="settings-action-btn" onClick={downloadJson}>
-                      <FiDownload size={14} />
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      className="px-2 py-2 rounded-cu border border-cu-border hover:bg-cu-bg text-sm"
+                      onClick={downloadJson}
+                    >
                       {t('exportJson')}
                     </button>
-                  </div>
-
-                  <div className="settings-row">
-                    <label>{t('importData')}</label>
-                    <label className="settings-action-btn" style={{ cursor: 'pointer' }}>
-                      <FiUpload size={14} />
-                      {t('importJson')}
-                      <input
-                        type="file"
-                        accept="application/json"
-                        style={{ display: 'none' }}
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          e.target.value = '';
-                          importJsonFile(file);
-                        }}
-                      />
-                    </label>
-                  </div>
-
-                  <div className="settings-row">
-                    <label>{t('resetDb')}</label>
                     <button
-                      className="settings-action-btn"
-                      onClick={async () => {
-                        try {
-                          const resp = await fetch('/api/state/reset?seed=1', { method: 'POST' });
-                          const json = await resp.json().catch(() => ({}));
-                          if (resp.ok && json?.state) {
-                            dispatch({ type: 'IMPORT_STATE', state: json.state });
-                          }
-                        } catch (e) {
-                          console.error('Reset failed', e);
-                        }
-                      }}
+                      className="px-2 py-2 rounded-cu border border-cu-border hover:bg-cu-bg text-sm"
+                      onClick={() => fileInputRef.current?.click()}
                     >
-                      {t('seedDemoData')}
+                      {t('importJson')}
                     </button>
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="application/json"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        e.target.value = '';
+                        importJsonFile(file);
+                      }}
+                    />
                   </div>
+
+                  <button
+                    className="w-full px-3 py-2 rounded-cu border border-cu-border hover:bg-cu-bg text-sm"
+                    onClick={async () => {
+                      try {
+                        const resp = await fetch('/api/state/reset?seed=1', { method: 'POST' });
+                        const json = await resp.json().catch(() => ({}));
+                        if (resp.ok && json?.state) {
+                          dispatch({ type: 'IMPORT_STATE', state: json.state });
+                        }
+                      } catch (e) {
+                        console.error('Reset failed', e);
+                      }
+                    }}
+                  >
+                    {t('seedDemoData')}
+                  </button>
                 </div>
               )}
             </div>
           </>
         )}
 
-        <button className="collapse-btn" onClick={() => setCollapsed(!collapsed)}>
+        <button
+          className="absolute -right-3 top-1/2 -translate-y-1/2 h-8 w-8 rounded-full bg-white border border-cu-border shadow-cu flex items-center justify-center"
+          onClick={() => setCollapsed(!collapsed)}
+        >
           {collapsed
             ? (isRTL ? <FiChevronLeft /> : <FiChevronRight />)
-            : (isRTL ? <FiChevronRight /> : <FiChevronLeft />)
-          }
+            : (isRTL ? <FiChevronRight /> : <FiChevronLeft />)}
         </button>
       </div>
 
       {contextMenu && (
-        <div
-          className="context-menu-overlay"
-          onClick={() => setContextMenu(null)}
-        >
+        <div className="fixed inset-0 z-[1300]" onClick={() => setContextMenu(null)}>
           <div
-            className="context-menu"
+            className="fixed z-[1301] bg-white border border-cu-border rounded-cu shadow-cu py-1 min-w-[210px]"
             style={{ left: contextMenu.x, top: contextMenu.y }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div
-              className="context-item"
+            <button
+              className="w-full px-3 py-2 text-left text-sm hover:bg-cu-bg flex items-center gap-2"
               onClick={() => {
                 dispatch({ type: 'TOGGLE_FAVORITE', boardId: contextMenu.board.id });
                 setContextMenu(null);
@@ -278,9 +290,9 @@ export default function Sidebar() {
             >
               <FiStar size={14} />
               {contextMenu.board.favorite ? t('removeFromFavorites') : t('addToFavorites')}
-            </div>
-            <div
-              className="context-item"
+            </button>
+            <button
+              className="w-full px-3 py-2 text-left text-sm hover:bg-cu-bg flex items-center gap-2"
               onClick={() => {
                 dispatch({ type: 'DUPLICATE_BOARD', boardId: contextMenu.board.id });
                 setContextMenu(null);
@@ -288,9 +300,9 @@ export default function Sidebar() {
             >
               <FiCopy size={14} />
               {t('duplicateBoard')}
-            </div>
-            <div
-              className="context-item danger"
+            </button>
+            <button
+              className="w-full px-3 py-2 text-left text-sm hover:bg-cu-bg flex items-center gap-2 text-red-600"
               onClick={() => {
                 dispatch({ type: 'DELETE_BOARD', boardId: contextMenu.board.id });
                 setContextMenu(null);
@@ -298,14 +310,12 @@ export default function Sidebar() {
             >
               <FiTrash2 size={14} />
               {t('deleteBoard')}
-            </div>
+            </button>
           </div>
         </div>
       )}
 
-      {showWorkflows && (
-        <WorkflowManager onClose={() => setShowWorkflows(false)} />
-      )}
+      {showWorkflows && <WorkflowManager onClose={() => setShowWorkflows(false)} />}
 
       {showActivity && (
         <ActivityLogModal
@@ -315,13 +325,7 @@ export default function Sidebar() {
         />
       )}
 
-      {showN8n && (
-        <N8nWorkflowsModal onClose={() => setShowN8n(false)} />
-      )}
-
-      {showAI && (
-        <AIAssistantModal onClose={() => setShowAI(false)} />
-      )}
+      {showN8n && <N8nWorkflowsModal onClose={() => setShowN8n(false)} />}
     </>
   );
 }
