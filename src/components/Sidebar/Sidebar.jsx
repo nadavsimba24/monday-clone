@@ -4,6 +4,7 @@ import { useSettings } from '../../context/SettingsContext';
 import { FiPlus, FiStar, FiTrash2, FiCopy, FiChevronLeft, FiChevronRight, FiSearch, FiGrid, FiLayers, FiSettings, FiDownload, FiUpload, FiActivity } from 'react-icons/fi';
 import WorkflowManager from '../Workflow/WorkflowManager';
 import ActivityLogModal from '../Activity/ActivityLogModal';
+import N8nWorkflowsModal from '../N8n/N8nWorkflowsModal';
 import './Sidebar.css';
 
 export default function Sidebar() {
@@ -15,6 +16,7 @@ export default function Sidebar() {
   const [showWorkflows, setShowWorkflows] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
+  const [showN8n, setShowN8n] = useState(false);
 
   const favorites = state.boards.filter((b) => b.favorite);
   const filtered = state.boards.filter((b) =>
@@ -183,6 +185,13 @@ export default function Sidebar() {
                   </div>
 
                   <div className="settings-row">
+                    <label>{t('n8n')}</label>
+                    <button className="settings-action-btn" onClick={() => setShowN8n(true)}>
+                      {t('n8nWorkflows')}
+                    </button>
+                  </div>
+
+                  <div className="settings-row">
                     <label>{t('exportData')}</label>
                     <button className="settings-action-btn" onClick={downloadJson}>
                       <FiDownload size={14} />
@@ -275,6 +284,10 @@ export default function Sidebar() {
           onClose={() => setShowActivity(false)}
           onClear={() => dispatch({ type: 'CLEAR_ACTIVITY' })}
         />
+      )}
+
+      {showN8n && (
+        <N8nWorkflowsModal onClose={() => setShowN8n(false)} />
       )}
     </>
   );

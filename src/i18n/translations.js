@@ -102,6 +102,14 @@ export const translations = {
     importData: 'Import',
     exportJson: 'Download JSON',
     importJson: 'Import JSON',
+    n8n: 'n8n',
+    n8nWorkflows: 'n8n workflows',
+    searchWorkflows: 'Search workflows...',
+    noWorkflowsFound: 'No workflows found',
+    refresh: 'Refresh',
+    loading: 'Loading...',
+    run: 'Run',
+    running: 'Running...',
   },
   he: {
     // Sidebar
@@ -206,6 +214,14 @@ export const translations = {
     importData: 'ייבוא',
     exportJson: 'הורד JSON',
     importJson: 'ייבא JSON',
+    n8n: 'n8n',
+    n8nWorkflows: 'וורקפלואוס של n8n',
+    searchWorkflows: 'חיפוש וורקפלואוס...',
+    noWorkflowsFound: 'לא נמצאו וורקפלואוס',
+    refresh: 'רענן',
+    loading: 'טוען...',
+    run: 'הרץ',
+    running: 'מריץ...',
   },
 };
 
