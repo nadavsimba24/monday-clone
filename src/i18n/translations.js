@@ -113,6 +113,14 @@ export const translations = {
     resetDb: 'Reset database',
     seedDemoData: 'Load demo data',
     resetDone: 'Done',
+
+    // AI
+    aiAssistantTitle: 'AI assistant (Meshkal Weave 46)',
+    aiAssistantHint: 'Ask to create boards, add groups/items, or update values. Review actions, then Apply.',
+    aiPromptPlaceholder: 'Example: Create a new board for municipal waste analytics with 3 groups and 5 tasks each…',
+    apply: 'Apply',
+    assistant: 'Assistant',
+    previewActions: 'Preview actions',
   },
   he: {
     // Sidebar
@@ -228,6 +236,14 @@ export const translations = {
     resetDb: 'איפוס דאטהבייס',
     seedDemoData: 'טען דאטה דמו',
     resetDone: 'בוצע',
+
+    // AI
+    aiAssistantTitle: 'סוכן AI (משכל וייב 46)',
+    aiAssistantHint: 'תבקש ליצור לוחות, להוסיף קבוצות/פריטים, או לעדכן ערכים. בדוק את הפעולות ואז לחץ החל.',
+    aiPromptPlaceholder: 'דוגמה: תיצור לוח חדש לאנליטיקה על משאיות זבל עם 3 קבוצות ו-5 משימות בכל קבוצה…',
+    apply: 'החל',
+    assistant: 'עוזר',
+    previewActions: 'תצוגה מקדימה של פעולות',
   },
 };
 

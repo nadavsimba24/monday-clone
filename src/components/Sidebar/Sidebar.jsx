@@ -5,6 +5,7 @@ import { FiPlus, FiStar, FiTrash2, FiCopy, FiChevronLeft, FiChevronRight, FiSear
 import WorkflowManager from '../Workflow/WorkflowManager';
 import ActivityLogModal from '../Activity/ActivityLogModal';
 import N8nWorkflowsModal from '../N8n/N8nWorkflowsModal';
+import AIAssistantModal from '../AI/AIAssistantModal';
 import './Sidebar.css';
 
 export default function Sidebar() {
@@ -17,6 +18,7 @@ export default function Sidebar() {
   const [showSettings, setShowSettings] = useState(false);
   const [showActivity, setShowActivity] = useState(false);
   const [showN8n, setShowN8n] = useState(false);
+  const [showAI, setShowAI] = useState(false);
 
   const favorites = state.boards.filter((b) => b.favorite);
   const filtered = state.boards.filter((b) =>
@@ -192,6 +194,13 @@ export default function Sidebar() {
                   </div>
 
                   <div className="settings-row">
+                    <label>AI</label>
+                    <button className="settings-action-btn" onClick={() => setShowAI(true)}>
+                      {t('aiAssistantTitle')}
+                    </button>
+                  </div>
+
+                  <div className="settings-row">
                     <label>{t('exportData')}</label>
                     <button className="settings-action-btn" onClick={downloadJson}>
                       <FiDownload size={14} />
@@ -308,6 +317,10 @@ export default function Sidebar() {
 
       {showN8n && (
         <N8nWorkflowsModal onClose={() => setShowN8n(false)} />
+      )}
+
+      {showAI && (
+        <AIAssistantModal onClose={() => setShowAI(false)} />
       )}
     </>
   );

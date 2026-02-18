@@ -2,6 +2,7 @@ import 'dotenv/config';
 import express from 'express';
 import path from 'path';
 import { openDb } from './db.js';
+import { runMeshkalWeave46 } from './ai.js';
 
 const app = express();
 app.use(express.json({ limit: '10mb' }));
@@ -137,6 +138,24 @@ app.get('/api/n8n/health', async (_req, res) => {
     res.json({ ok: true });
   } catch (e) {
     res.status(e.status || 500).json({ ok: false, error: e.message, details: e.details });
+  }
+});
+
+app.post('/api/ai/meshkal-weave-46', async (req, res) => {
+  try {
+    const prompt = req.body?.prompt;
+    const state = req.body?.state;
+    if (!prompt || typeof prompt !== 'string') {
+      return res.status(400).json({ error: 'Missing prompt' });
+    }
+    if (!state || typeof state !== 'object') {
+      return res.status(400).json({ error: 'Missing state' });
+    }
+
+    const out = await runMeshkalWeave46({ prompt, state });
+    res.json(out);
+  } catch (e) {
+    res.status(e.status || 500).json({ error: e.message, details: e.details });
   }
 });
 
