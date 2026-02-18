@@ -5,11 +5,38 @@ import { createDefaultData } from '../data/defaultData';
 
 const BoardContext = createContext();
 
+function appendActivity(state, entry) {
+  const next = [entry, ...(state.activity || [])];
+  // keep the log small so we don't bloat localStorage
+  if (next.length > 200) next.length = 200;
+  return { ...state, activity: next };
+}
+
 function boardReducer(state, action) {
   switch (action.type) {
     // Board actions
     case 'SET_ACTIVE_BOARD':
       return { ...state, activeBoardId: action.boardId };
+
+    case 'IMPORT_STATE': {
+      const imported = action.state;
+      if (!imported || typeof imported !== 'object') return state;
+      const boards = Array.isArray(imported.boards) ? imported.boards : [];
+      const activeBoardId = imported.activeBoardId && boards.some((b) => b.id === imported.activeBoardId)
+        ? imported.activeBoardId
+        : (boards[0]?.id || null);
+
+      return {
+        ...imported,
+        boards,
+        activeBoardId,
+        people: Array.isArray(imported.people) ? imported.people : [],
+        activity: Array.isArray(imported.activity) ? imported.activity : [],
+      };
+    }
+
+    case 'CLEAR_ACTIVITY':
+      return { ...state, activity: [] };
 
     case 'ADD_BOARD': {
       const newBoard = {
@@ -32,11 +59,14 @@ function boardReducer(state, action) {
           },
         ],
       };
-      return {
-        ...state,
-        boards: [...state.boards, newBoard],
-        activeBoardId: newBoard.id,
-      };
+      return appendActivity(
+        {
+          ...state,
+          boards: [...state.boards, newBoard],
+          activeBoardId: newBoard.id,
+        },
+        { id: uuid(), ts: new Date().toISOString(), kind: 'activity.boardCreated', meta: { name: newBoard.name } }
+      );
     }
 
     case 'ADD_BOARD_DIRECT': {
@@ -48,15 +78,19 @@ function boardReducer(state, action) {
     }
 
     case 'DELETE_BOARD': {
+      const board = state.boards.find((b) => b.id === action.boardId);
       const filtered = state.boards.filter((b) => b.id !== action.boardId);
-      return {
-        ...state,
-        boards: filtered,
-        activeBoardId:
-          state.activeBoardId === action.boardId
-            ? filtered[0]?.id || null
-            : state.activeBoardId,
-      };
+      return appendActivity(
+        {
+          ...state,
+          boards: filtered,
+          activeBoardId:
+            state.activeBoardId === action.boardId
+              ? filtered[0]?.id || null
+              : state.activeBoardId,
+        },
+        { id: uuid(), ts: new Date().toISOString(), kind: 'activity.boardDeleted', meta: { name: board?.name } }
+      );
     }
 
     case 'RENAME_BOARD':
@@ -95,19 +129,21 @@ function boardReducer(state, action) {
 
     // Group actions
     case 'ADD_GROUP': {
-      return updateBoard(state, action.boardId, (board) => ({
+      const title = action.title || 'New Group';
+      const next = updateBoard(state, action.boardId, (board) => ({
         ...board,
         groups: [
           ...board.groups,
           {
             id: uuid(),
-            title: action.title || 'New Group',
+            title,
             color: action.color || '#4caf82',
             collapsed: false,
             items: [],
           },
         ],
       }));
+      return appendActivity(next, { id: uuid(), ts: new Date().toISOString(), kind: 'activity.groupCreated', meta: { name: title } });
     }
 
     case 'DELETE_GROUP':
@@ -150,14 +186,17 @@ function boardReducer(state, action) {
     }
 
     // Item actions
-    case 'ADD_ITEM':
-      return updateGroup(state, action.boardId, action.groupId, (group) => ({
+    case 'ADD_ITEM': {
+      const name = action.name || 'New Item';
+      const next = updateGroup(state, action.boardId, action.groupId, (group) => ({
         ...group,
         items: [
           ...group.items,
-          { id: uuid(), name: action.name || 'New Item', values: {} },
+          { id: uuid(), name, values: {} },
         ],
       }));
+      return appendActivity(next, { id: uuid(), ts: new Date().toISOString(), kind: 'activity.itemCreated', meta: { name } });
+    }
 
     case 'DELETE_ITEM':
       return updateGroup(state, action.boardId, action.groupId, (group) => ({
@@ -277,8 +316,8 @@ function boardReducer(state, action) {
       }));
 
     // Item updates (comments)
-    case 'ADD_COMMENT':
-      return updateGroup(state, action.boardId, action.groupId, (group) => ({
+    case 'ADD_COMMENT': {
+      const next = updateGroup(state, action.boardId, action.groupId, (group) => ({
         ...group,
         items: group.items.map((i) =>
           i.id === action.itemId
@@ -292,6 +331,8 @@ function boardReducer(state, action) {
             : i
         ),
       }));
+      return appendActivity(next, { id: uuid(), ts: new Date().toISOString(), kind: 'activity.commentAdded' });
+    }
 
     default:
       return state;
@@ -316,7 +357,15 @@ export function BoardProvider({ children }) {
   const [state, dispatch] = useReducer(
     boardReducer,
     null,
-    () => loadState() || createDefaultData()
+    () => {
+      const loaded = loadState();
+      const base = loaded || createDefaultData();
+      // lightweight migrations for older saved states
+      return {
+        ...base,
+        activity: Array.isArray(base.activity) ? base.activity : [],
+      };
+    }
   );
 
   useEffect(() => {

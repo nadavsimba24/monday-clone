@@ -38,6 +38,7 @@ export function createDefaultData() {
 
   return {
     people: PEOPLE,
+    activity: [],
     boards: [
       {
         id: boardId,

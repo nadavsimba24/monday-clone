@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useBoard } from '../../context/BoardContext';
 import { useSettings } from '../../context/SettingsContext';
-import { FiPlus, FiStar, FiTrash2, FiCopy, FiChevronLeft, FiChevronRight, FiSearch, FiGrid, FiLayers, FiSettings } from 'react-icons/fi';
+import { FiPlus, FiStar, FiTrash2, FiCopy, FiChevronLeft, FiChevronRight, FiSearch, FiGrid, FiLayers, FiSettings, FiDownload, FiUpload, FiActivity } from 'react-icons/fi';
 import WorkflowManager from '../Workflow/WorkflowManager';
+import ActivityLogModal from '../Activity/ActivityLogModal';
 import './Sidebar.css';
 
 export default function Sidebar() {
@@ -13,6 +14,7 @@ export default function Sidebar() {
   const [contextMenu, setContextMenu] = useState(null);
   const [showWorkflows, setShowWorkflows] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showActivity, setShowActivity] = useState(false);
 
   const favorites = state.boards.filter((b) => b.favorite);
   const filtered = state.boards.filter((b) =>
@@ -26,6 +28,32 @@ export default function Sidebar() {
   function handleContextMenu(e, board) {
     e.preventDefault();
     setContextMenu({ x: e.clientX, y: e.clientY, board });
+  }
+
+  function downloadJson() {
+    const data = JSON.stringify(state, null, 2);
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `monday-clone-${new Date().toISOString().slice(0, 10)}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  async function importJsonFile(file) {
+    if (!file) return;
+    try {
+      const text = await file.text();
+      const parsed = JSON.parse(text);
+      dispatch({ type: 'IMPORT_STATE', state: parsed });
+    } catch (e) {
+      console.error('Failed to import JSON:', e);
+    }
   }
 
   return (
@@ -143,6 +171,42 @@ export default function Sidebar() {
                       </button>
                     </div>
                   </div>
+
+                  <div className="settings-divider" />
+
+                  <div className="settings-row">
+                    <label>{t('activityLog')}</label>
+                    <button className="settings-action-btn" onClick={() => setShowActivity(true)}>
+                      <FiActivity size={14} />
+                      {t('activityLog')}
+                    </button>
+                  </div>
+
+                  <div className="settings-row">
+                    <label>{t('exportData')}</label>
+                    <button className="settings-action-btn" onClick={downloadJson}>
+                      <FiDownload size={14} />
+                      {t('exportJson')}
+                    </button>
+                  </div>
+
+                  <div className="settings-row">
+                    <label>{t('importData')}</label>
+                    <label className="settings-action-btn" style={{ cursor: 'pointer' }}>
+                      <FiUpload size={14} />
+                      {t('importJson')}
+                      <input
+                        type="file"
+                        accept="application/json"
+                        style={{ display: 'none' }}
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          e.target.value = '';
+                          importJsonFile(file);
+                        }}
+                      />
+                    </label>
+                  </div>
                 </div>
               )}
             </div>
@@ -203,6 +267,14 @@ export default function Sidebar() {
 
       {showWorkflows && (
         <WorkflowManager onClose={() => setShowWorkflows(false)} />
+      )}
+
+      {showActivity && (
+        <ActivityLogModal
+          activity={state.activity}
+          onClose={() => setShowActivity(false)}
+          onClear={() => dispatch({ type: 'CLEAR_ACTIVITY' })}
+        />
       )}
     </>
   );

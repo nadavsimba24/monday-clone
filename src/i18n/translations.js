@@ -88,6 +88,20 @@ export const translations = {
 
     // Settings
     settings: 'Settings',
+
+    // Data / activity
+    activityLog: 'Activity log',
+    clearActivity: 'Clear',
+    noActivityYet: 'No activity yet',
+    'activity.boardCreated': 'Board created',
+    'activity.boardDeleted': 'Board deleted',
+    'activity.groupCreated': 'Group created',
+    'activity.itemCreated': 'Item created',
+    'activity.commentAdded': 'Comment added',
+    exportData: 'Export',
+    importData: 'Import',
+    exportJson: 'Download JSON',
+    importJson: 'Import JSON',
   },
   he: {
     // Sidebar
@@ -178,6 +192,20 @@ export const translations = {
 
     // Settings
     settings: 'הגדרות',
+
+    // Data / activity
+    activityLog: 'יומן פעילות',
+    clearActivity: 'נקה',
+    noActivityYet: 'אין פעילות עדיין',
+    'activity.boardCreated': 'נוצר לוח',
+    'activity.boardDeleted': 'נמחק לוח',
+    'activity.groupCreated': 'נוצרה קבוצה',
+    'activity.itemCreated': 'נוצר פריט',
+    'activity.commentAdded': 'נוסף עדכון',
+    exportData: 'ייצוא',
+    importData: 'ייבוא',
+    exportJson: 'הורד JSON',
+    importJson: 'ייבא JSON',
   },
 };
 
