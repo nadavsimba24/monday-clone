@@ -79,9 +79,14 @@ function buildStateIndex(state) {
   const boards = Array.isArray(state?.boards) ? state.boards : [];
 
   const byBoardId = new Map();
+  const boardIdByName = new Map();
+
   for (const b of boards) {
     if (!b?.id) continue;
     const boardId = String(b.id);
+    const boardName = String(b.name || '').toLowerCase();
+    if (boardName && !boardIdByName.has(boardName)) boardIdByName.set(boardName, boardId);
+
     const columns = Array.isArray(b.columns) ? b.columns : [];
     const groups = Array.isArray(b.groups) ? b.groups : [];
 
@@ -100,45 +105,86 @@ function buildStateIndex(state) {
     );
 
     const itemById = new Map();
+    const itemIdByName = new Map(); // within board (may be ambiguous)
     for (const g of groups) {
       const items = Array.isArray(g?.items) ? g.items : [];
       for (const it of items) {
-        itemById.set(String(it.id), it);
+        if (it?.id) itemById.set(String(it.id), it);
+        const nm = String(it?.name || '').toLowerCase();
+        if (nm && it?.id && !itemIdByName.has(nm)) itemIdByName.set(nm, String(it.id));
       }
     }
 
-    byBoardId.set(boardId, { board: b, colById, colByTitle, groupById, groupByTitle, itemById });
+    byBoardId.set(boardId, {
+      board: b,
+      colById,
+      colByTitle,
+      groupById,
+      groupByTitle,
+      itemById,
+      itemIdByName,
+    });
   }
 
-  return { byBoardId };
+  return { byBoardId, boardIdByName };
 }
 
 function normalizeActions(actions, state) {
   if (!Array.isArray(actions)) return [];
   const idx = buildStateIndex(state);
 
-  return actions
-    .map((a) => {
-      if (!a || typeof a !== 'object' || typeof a.type !== 'string') return null;
+  const maybeResolveBoardId = (a) => {
+    if (a.boardId) return a;
+    if (a.boardName) {
+      const bid = idx.boardIdByName.get(String(a.boardName).toLowerCase());
+      if (bid) return { ...a, boardId: bid };
+    }
+    return a;
+  };
 
-      if (a.type === 'ADD_BOARD_DIRECT') {
-        return { ...a, board: normalizeBoard(a.board) };
+  const maybeResolveGroupId = (a, rec) => {
+    if (a.groupId) return a;
+    if (a.groupTitle) {
+      const gid = rec.groupByTitle.get(String(a.groupTitle).toLowerCase());
+      if (gid) return { ...a, groupId: gid };
+    }
+    return a;
+  };
+
+  const maybeResolveItemId = (a, rec) => {
+    if (a.itemId) return a;
+    if (a.itemName) {
+      const iid = rec.itemIdByName.get(String(a.itemName).toLowerCase());
+      if (iid) return { ...a, itemId: iid };
+    }
+    return a;
+  };
+
+  const maybeResolveColumnId = (a, rec) => {
+    if (a.columnId) return a;
+    if (a.columnTitle) {
+      const cid = rec.colByTitle.get(String(a.columnTitle).toLowerCase());
+      if (cid) return { ...a, columnId: cid };
+    }
+    return a;
+  };
+
+  return actions
+    .map((raw) => {
+      if (!raw || typeof raw !== 'object' || typeof raw.type !== 'string') return null;
+
+      if (raw.type === 'ADD_BOARD_DIRECT') {
+        return { ...raw, board: normalizeBoard(raw.board) };
       }
 
-      // Allow model convenience fields and map them to ids.
-      if (a.type === 'UPDATE_ITEM_VALUE') {
-        const boardId = String(a.boardId || '');
-        const rec = idx.byBoardId.get(boardId);
-        if (rec) {
-          if (!a.columnId && a.columnTitle) {
-            const colId = rec.colByTitle.get(String(a.columnTitle).toLowerCase());
-            if (colId) a = { ...a, columnId: colId };
-          }
-          if (!a.groupId && a.groupTitle) {
-            const groupId = rec.groupByTitle.get(String(a.groupTitle).toLowerCase());
-            if (groupId) a = { ...a, groupId };
-          }
-        }
+      let a = maybeResolveBoardId(raw);
+      const boardId = a.boardId ? String(a.boardId) : '';
+      const rec = boardId ? idx.byBoardId.get(boardId) : null;
+
+      if (rec) {
+        a = maybeResolveGroupId(a, rec);
+        a = maybeResolveItemId(a, rec);
+        a = maybeResolveColumnId(a, rec);
       }
 
       return a;
@@ -226,7 +272,7 @@ Allowed actions (client will dispatch into a reducer):
 Rules:
 - Prefer ADD_BOARD_DIRECT when creating a full new board with columns+groups+items.
 - Use existing ids from the mapping context when updating.
-- If you don't know a column id, you may include columnTitle (server will resolve it when possible).
+- If you don't know an id, you may include boardName / groupTitle / itemName / columnTitle and the server will resolve it when possible.
 - Use UUID v4 strings for new ids you create. (If you are unsure, omit ids and the server will generate them.)
 - Do not invent unknown action types.
 - Keep actions minimal.
