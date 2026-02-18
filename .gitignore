@@ -12,6 +12,8 @@ dist
 dist-ssr
 *.local
 .env
+/data/
+*.sqlite
 
 # Editor directories and files
 .vscode/*
