@@ -121,6 +121,8 @@ export const translations = {
     apply: 'Apply',
     assistant: 'Assistant',
     previewActions: 'Preview actions',
+    aiAssistantHello: 'I\'m Meshkal Weave 46. Tell me what to build or update, and I\'ll prepare actions for you.',
+    close: 'Close',
   },
   he: {
     // Sidebar
@@ -244,6 +246,8 @@ export const translations = {
     apply: 'החל',
     assistant: 'עוזר',
     previewActions: 'תצוגה מקדימה של פעולות',
+    aiAssistantHello: 'אני משכל וייב 46. תגיד לי מה לבנות או לעדכן, ואני אכין פעולות לביצוע.',
+    close: 'סגור',
   },
 };
 

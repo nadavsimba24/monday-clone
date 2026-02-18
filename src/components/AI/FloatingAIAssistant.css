@@ -1,0 +1,242 @@
+.aiw-bubble {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  width: 56px;
+  height: 56px;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.08);
+  background: #ffffff;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  cursor: pointer;
+  z-index: 1200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.aiw-bubble:hover {
+  transform: translateY(-1px);
+}
+
+.aiw-icons {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 18px;
+}
+
+.aiw-panel {
+  position: fixed;
+  left: 16px;
+  bottom: 84px;
+  width: min(380px, calc(100vw - 32px));
+  max-height: min(560px, calc(100vh - 120px));
+  background: #fff;
+  border-radius: 14px;
+  border: 1px solid rgba(0,0,0,0.08);
+  box-shadow: 0 16px 50px rgba(0,0,0,0.22);
+  z-index: 1200;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.aiw-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e6e9ef;
+}
+
+.aiw-title {
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.aiw-close {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  color: #676879;
+}
+
+.aiw-body {
+  padding: 12px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.aiw-msg {
+  display: flex;
+}
+
+.aiw-msg.user {
+  justify-content: flex-end;
+}
+
+.aiw-msg.assistant {
+  justify-content: flex-start;
+}
+
+.aiw-msg-bubble {
+  max-width: 85%;
+  border-radius: 12px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.aiw-msg.user .aiw-msg-bubble {
+  background: #4caf82;
+  color: #fff;
+}
+
+.aiw-msg.assistant .aiw-msg-bubble {
+  background: #f5f6f8;
+  color: #323338;
+}
+
+.aiw-input-row {
+  padding: 10px 12px;
+  border-top: 1px solid #e6e9ef;
+  display: flex;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.aiw-input {
+  flex: 1;
+  border: 1px solid #e6e9ef;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 13px;
+  outline: none;
+  resize: none;
+}
+
+.aiw-send {
+  border: 1px solid #4caf82;
+  background: #4caf82;
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.aiw-send:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.aiw-error {
+  border: 1px solid #ffd7d7;
+  background: #fff5f5;
+  color: #b00020;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 13px;
+}
+
+.aiw-apply-row {
+  border: 1px solid #e6e9ef;
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fff;
+}
+
+.aiw-apply {
+  border: 1px solid #4caf82;
+  background: #4caf82;
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.aiw-actions-preview {
+  margin-top: 10px;
+}
+
+.aiw-actions-preview summary {
+  cursor: pointer;
+  color: #676879;
+  font-size: 12px;
+}
+
+.aiw-actions-preview pre {
+  margin: 8px 0 0;
+  background: #0b1220;
+  color: #d5d8df;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  max-height: 22vh;
+  overflow: auto;
+}
+
+/* Working animation */
+.aiw-working {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.aiw-working-row {
+  display: flex;
+  gap: 6px;
+}
+
+.aiw-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4caf82;
+  animation: aiwPulse 1s infinite ease-in-out;
+}
+
+.aiw-pulse:nth-child(2) { animation-delay: 0.15s; }
+.aiw-pulse:nth-child(3) { animation-delay: 0.3s; }
+
+@keyframes aiwPulse {
+  0%, 100% { transform: translateY(0); opacity: 0.35; }
+  50% { transform: translateY(-3px); opacity: 1; }
+}
+
+.aiw-flow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.aiw-flow-node {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #323338;
+  opacity: 0.65;
+}
+
+.aiw-flow-line {
+  height: 3px;
+  width: 36px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(76,175,130,0.2), rgba(76,175,130,1), rgba(76,175,130,0.2));
+  background-size: 200% 100%;
+  animation: aiwFlow 1.2s infinite linear;
+}
+
+@keyframes aiwFlow {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 200% 0%; }
+}

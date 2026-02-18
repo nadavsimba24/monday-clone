@@ -4,6 +4,7 @@ import { SettingsProvider } from './context/SettingsContext';
 import Sidebar from './components/Sidebar/Sidebar';
 import BoardView from './components/Board/BoardView';
 import ItemDetailPanel from './components/ItemDetail/ItemDetailPanel';
+import FloatingAIAssistant from './components/AI/FloatingAIAssistant';
 import './App.css';
 import './themes/bloomberg.css';
 import './themes/rtl.css';
@@ -34,6 +35,7 @@ export default function App() {
         <div className="app-layout">
           <Sidebar />
           <MainArea />
+          <FloatingAIAssistant />
         </div>
       </BoardProvider>
     </SettingsProvider>
