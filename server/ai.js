@@ -132,6 +132,12 @@ function buildStateIndex(state) {
 function normalizeActions(actions, state) {
   if (!Array.isArray(actions)) return [];
   const idx = buildStateIndex(state);
+  const people = Array.isArray(state?.people) ? state.people : [];
+  const peopleIdByName = new Map(
+    people
+      .filter((p) => p?.name)
+      .map((p) => [String(p.name).toLowerCase(), String(p.id)])
+  );
 
   const maybeResolveBoardId = (a) => {
     if (a.boardId) return a;
@@ -162,39 +168,84 @@ function normalizeActions(actions, state) {
 
   const maybeResolveColumnId = (a, rec) => {
     if (a.columnId) return a;
-    if (a.columnTitle) {
-      const cid = rec.colByTitle.get(String(a.columnTitle).toLowerCase());
+
+    const title = a.columnTitle ? String(a.columnTitle).toLowerCase() : '';
+    if (title) {
+      const cid = rec.colByTitle.get(title);
       if (cid) return { ...a, columnId: cid };
+
+      // Common synonyms (Hebrew/English) for the person column
+      const wantsPerson = ['owner', 'assignee', 'responsible', 'אחראי'].some((k) => title.includes(k));
+      if (wantsPerson) {
+        for (const c of rec.colById.values()) {
+          if (c?.type === 'person') return { ...a, columnId: String(c.id) };
+        }
+      }
     }
+
     return a;
   };
 
-  return actions
-    .map((raw) => {
-      if (!raw || typeof raw !== 'object' || typeof raw.type !== 'string') return null;
+  const out = [];
 
-      if (raw.type === 'ADD_BOARD_DIRECT') {
-        return { ...raw, board: normalizeBoard(raw.board) };
+  for (const raw of actions) {
+    if (!raw || typeof raw !== 'object' || typeof raw.type !== 'string') continue;
+
+    if (raw.type === 'ADD_BOARD_DIRECT') {
+      out.push({ ...raw, board: normalizeBoard(raw.board) });
+      continue;
+    }
+
+    let a = maybeResolveBoardId(raw);
+    const boardId = a.boardId ? String(a.boardId) : '';
+    const rec = boardId ? idx.byBoardId.get(boardId) : null;
+
+    if (rec) {
+      a = maybeResolveGroupId(a, rec);
+      a = maybeResolveItemId(a, rec);
+      a = maybeResolveColumnId(a, rec);
+
+      // If this is a person column update and the value is a name, map to person.id.
+      if (a.type === 'UPDATE_ITEM_VALUE' && a.columnId) {
+        const col = rec.colById.get(String(a.columnId));
+        if (col?.type === 'person') {
+          if (typeof a.value === 'string' && a.value.trim() && !peopleIdByName.has(a.value.toLowerCase())) {
+            // create person on the fly
+            const newPersonId = newId();
+            const name = a.value.trim();
+            out.push({
+              type: 'ADD_PERSON',
+              person: {
+                id: newPersonId,
+                name,
+                color: '#579bfc',
+              },
+            });
+            out.push({ ...a, value: newPersonId });
+            continue;
+          }
+
+          if (typeof a.value === 'string') {
+            const pid = peopleIdByName.get(a.value.toLowerCase());
+            if (pid) {
+              out.push({ ...a, value: pid });
+              continue;
+            }
+          }
+        }
       }
+    }
 
-      let a = maybeResolveBoardId(raw);
-      const boardId = a.boardId ? String(a.boardId) : '';
-      const rec = boardId ? idx.byBoardId.get(boardId) : null;
+    out.push(a);
+  }
 
-      if (rec) {
-        a = maybeResolveGroupId(a, rec);
-        a = maybeResolveItemId(a, rec);
-        a = maybeResolveColumnId(a, rec);
-      }
-
-      return a;
-    })
-    .filter(Boolean);
+  return out;
 }
 
 function buildMappingContext(state) {
   const boards = Array.isArray(state?.boards) ? state.boards : [];
   const activeBoardId = state?.activeBoardId || null;
+  const people = Array.isArray(state?.people) ? state.people : [];
 
   const summarizeBoard = (b) => ({
     id: b.id,
@@ -214,8 +265,10 @@ function buildMappingContext(state) {
     activeBoardId,
     activeBoard: activeBoard ? summarizeBoard(activeBoard) : null,
     boards: boards.slice(0, 8).map(summarizeBoard),
+    people: people.slice(0, 50).map((p) => ({ id: p.id, name: p.name, color: p.color })),
     notes: {
       itemValuesPath: "state.boards[].groups[].items[].values[columnId]",
+      personValue: "For person columns, value should be a person.id from mapping.people",
       updateValueAction: {
         type: "UPDATE_ITEM_VALUE",
         boardId: "<boardId>",
@@ -268,6 +321,7 @@ Allowed actions (client will dispatch into a reducer):
 - {"type":"RENAME_ITEM","boardId":string,"groupId":string,"itemId":string,"name":string}
 - {"type":"DELETE_ITEM","boardId":string,"groupId":string,"itemId":string}
 - {"type":"UPDATE_ITEM_VALUE","boardId":string,"groupId":string,"itemId":string,"columnId":string,"value":any}
+- {"type":"ADD_PERSON","person":{"id":string,"name":string,"color":string}}  // required when assigning a new person name
 
 Rules:
 - Prefer ADD_BOARD_DIRECT when creating a full new board with columns+groups+items.

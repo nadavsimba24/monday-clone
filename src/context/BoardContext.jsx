@@ -38,6 +38,18 @@ function boardReducer(state, action) {
     case 'CLEAR_ACTIVITY':
       return { ...state, activity: [] };
 
+    // People
+    case 'ADD_PERSON': {
+      const person = action.person;
+      if (!person || !person.id || !person.name) return state;
+      // Avoid duplicates by id
+      if ((state.people || []).some((p) => p.id === person.id)) return state;
+      return {
+        ...state,
+        people: [...(state.people || []), person],
+      };
+    }
+
     case 'ADD_BOARD': {
       const newBoard = {
         id: uuid(),
