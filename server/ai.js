@@ -75,15 +75,111 @@ function normalizeBoard(board) {
   };
 }
 
-function normalizeActions(actions) {
-  if (!Array.isArray(actions)) return [];
-  return actions.map((a) => {
-    if (!a || typeof a !== 'object' || typeof a.type !== 'string') return null;
-    if (a.type === 'ADD_BOARD_DIRECT') {
-      return { ...a, board: normalizeBoard(a.board) };
+function buildStateIndex(state) {
+  const boards = Array.isArray(state?.boards) ? state.boards : [];
+
+  const byBoardId = new Map();
+  for (const b of boards) {
+    if (!b?.id) continue;
+    const boardId = String(b.id);
+    const columns = Array.isArray(b.columns) ? b.columns : [];
+    const groups = Array.isArray(b.groups) ? b.groups : [];
+
+    const colById = new Map(columns.map((c) => [String(c.id), c]));
+    const colByTitle = new Map(
+      columns
+        .filter((c) => c?.title)
+        .map((c) => [String(c.title).toLowerCase(), String(c.id)])
+    );
+
+    const groupById = new Map(groups.map((g) => [String(g.id), g]));
+    const groupByTitle = new Map(
+      groups
+        .filter((g) => g?.title)
+        .map((g) => [String(g.title).toLowerCase(), String(g.id)])
+    );
+
+    const itemById = new Map();
+    for (const g of groups) {
+      const items = Array.isArray(g?.items) ? g.items : [];
+      for (const it of items) {
+        itemById.set(String(it.id), it);
+      }
     }
-    return a;
-  }).filter(Boolean);
+
+    byBoardId.set(boardId, { board: b, colById, colByTitle, groupById, groupByTitle, itemById });
+  }
+
+  return { byBoardId };
+}
+
+function normalizeActions(actions, state) {
+  if (!Array.isArray(actions)) return [];
+  const idx = buildStateIndex(state);
+
+  return actions
+    .map((a) => {
+      if (!a || typeof a !== 'object' || typeof a.type !== 'string') return null;
+
+      if (a.type === 'ADD_BOARD_DIRECT') {
+        return { ...a, board: normalizeBoard(a.board) };
+      }
+
+      // Allow model convenience fields and map them to ids.
+      if (a.type === 'UPDATE_ITEM_VALUE') {
+        const boardId = String(a.boardId || '');
+        const rec = idx.byBoardId.get(boardId);
+        if (rec) {
+          if (!a.columnId && a.columnTitle) {
+            const colId = rec.colByTitle.get(String(a.columnTitle).toLowerCase());
+            if (colId) a = { ...a, columnId: colId };
+          }
+          if (!a.groupId && a.groupTitle) {
+            const groupId = rec.groupByTitle.get(String(a.groupTitle).toLowerCase());
+            if (groupId) a = { ...a, groupId };
+          }
+        }
+      }
+
+      return a;
+    })
+    .filter(Boolean);
+}
+
+function buildMappingContext(state) {
+  const boards = Array.isArray(state?.boards) ? state.boards : [];
+  const activeBoardId = state?.activeBoardId || null;
+
+  const summarizeBoard = (b) => ({
+    id: b.id,
+    name: b.name,
+    columns: (b.columns || []).map((c) => ({ id: c.id, title: c.title, type: c.type, width: c.width })),
+    groups: (b.groups || []).map((g) => ({
+      id: g.id,
+      title: g.title,
+      color: g.color,
+      items: (g.items || []).slice(0, 20).map((it) => ({ id: it.id, name: it.name })),
+    })),
+  });
+
+  const activeBoard = boards.find((b) => b.id === activeBoardId);
+
+  return {
+    activeBoardId,
+    activeBoard: activeBoard ? summarizeBoard(activeBoard) : null,
+    boards: boards.slice(0, 8).map(summarizeBoard),
+    notes: {
+      itemValuesPath: "state.boards[].groups[].items[].values[columnId]",
+      updateValueAction: {
+        type: "UPDATE_ITEM_VALUE",
+        boardId: "<boardId>",
+        groupId: "<groupId>",
+        itemId: "<itemId>",
+        columnId: "<columnId>",
+        value: "<any>",
+      },
+    },
+  };
 }
 
 export async function runMeshkalWeave46({ prompt, state }) {
@@ -106,9 +202,16 @@ Return STRICT JSON only (no markdown) with shape:
   "actions": Array<object>
 }
 
+Data model (important):
+- state.boards[]: list of boards.
+- board.columns[]: columns with {id, type, title, width}
+- board.groups[]: groups with {id, title, color, collapsed, items[]}
+- group.items[]: items with {id, name, values}
+- item.values is a dictionary keyed by columnId: values[columnId] = value.
+
 Allowed actions (client will dispatch into a reducer):
 - {"type":"ADD_BOARD","name":string}
-- {"type":"ADD_BOARD_DIRECT","board":object}
+- {"type":"ADD_BOARD_DIRECT","board":object}  // preferred for creating full board
 - {"type":"SET_ACTIVE_BOARD","boardId":string}
 - {"type":"RENAME_BOARD","boardId":string,"name":string}
 - {"type":"DELETE_BOARD","boardId":string}
@@ -122,6 +225,8 @@ Allowed actions (client will dispatch into a reducer):
 
 Rules:
 - Prefer ADD_BOARD_DIRECT when creating a full new board with columns+groups+items.
+- Use existing ids from the mapping context when updating.
+- If you don't know a column id, you may include columnTitle (server will resolve it when possible).
 - Use UUID v4 strings for new ids you create. (If you are unsure, omit ids and the server will generate them.)
 - Do not invent unknown action types.
 - Keep actions minimal.
@@ -129,8 +234,9 @@ Rules:
 
   const user = {
     prompt,
+    mapping: buildMappingContext(state),
+    // Full state is still included for edge cases, but mapping is the primary guide.
     state,
-    notes: "State contains boards/groups/items/columns. Use existing ids when updating."
   };
 
   const url = baseUrl.replace(/\/$/, '') + '/v1/chat/completions';
@@ -183,6 +289,6 @@ Rules:
   }
 
   const safe = AgentResponseSchema.parse(parsed);
-  safe.actions = normalizeActions(safe.actions);
+  safe.actions = normalizeActions(safe.actions, state);
   return safe;
 }
