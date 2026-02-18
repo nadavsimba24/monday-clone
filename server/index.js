@@ -94,7 +94,8 @@ app.get('/api/n8n/health', async (_req, res) => {
 // Production: serve built app
 const distDir = path.resolve(process.cwd(), 'dist');
 app.use(express.static(distDir));
-app.get('*', (_req, res) => res.sendFile(path.join(distDir, 'index.html')));
+// Express 5 (path-to-regexp v6) doesn't accept "*" string patterns.
+app.get(/.*/, (_req, res) => res.sendFile(path.join(distDir, 'index.html')));
 
 const port = Number(env('PORT', '3001'));
 app.listen(port, () => {
