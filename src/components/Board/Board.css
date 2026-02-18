@@ -32,17 +32,18 @@
 }
 
 .board-title:hover {
-  color: #4caf82;
+  color: #0073ea;
 }
 
 .board-title-input {
   font-size: 22px;
   font-weight: 700;
-  border: 2px solid #4caf82;
-  border-radius: 4px;
-  padding: 2px 6px;
+  border: 2px solid #0073ea;
+  border-radius: 6px;
+  padding: 4px 8px;
   outline: none;
   color: #323338;
+  background: #fff;
 }
 
 .fav-btn {
@@ -84,12 +85,12 @@
 }
 
 .header-action-btn.primary {
-  background: #4caf82;
+  background: #0073ea;
   color: #fff;
 }
 
 .header-action-btn.primary:hover {
-  background: #3d9e70;
+  background: #0060c7;
 }
 
 .header-action-btn:disabled {
@@ -129,17 +130,17 @@
   align-items: center;
   gap: 6px;
   padding: 10px 20px;
-  background: #4caf82;
+  background: #0073ea;
   color: #fff;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 14px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background: #3d9e70;
+  background: #0060c7;
 }
 
 /* Group */
@@ -187,11 +188,11 @@
 .group-title-input {
   font-size: 16px;
   font-weight: 700;
-  border: 2px solid #4caf82;
-  border-radius: 4px;
-  padding: 1px 4px;
+  border: 2px solid #0073ea;
+  border-radius: 6px;
+  padding: 2px 6px;
   outline: none;
-  background: transparent;
+  background: #fff;
 }
 
 .group-count {
@@ -297,7 +298,7 @@
   width: 15px;
   height: 15px;
   cursor: pointer;
-  accent-color: #4caf82;
+  accent-color: #0073ea;
 }
 
 .item-name-cell {
@@ -319,16 +320,17 @@
 }
 
 .item-name:hover {
-  color: #4caf82;
+  color: #0073ea;
 }
 
 .item-name-input {
   width: 100%;
-  border: 2px solid #4caf82;
-  border-radius: 2px;
-  padding: 4px 6px;
+  border: 2px solid #0073ea;
+  border-radius: 6px;
+  padding: 6px 8px;
   font-size: 14px;
   outline: none;
+  background: #fff;
 }
 
 .item-cell {
@@ -434,8 +436,8 @@
 
 .add-group-btn:hover {
   background: #f5f6f8;
-  border-color: #4caf82;
-  color: #4caf82;
+  border-color: #0073ea;
+  color: #0073ea;
 }
 
 /* Add Column */
@@ -460,8 +462,8 @@
 }
 
 .add-column-btn:hover {
-  border-color: #4caf82;
-  color: #4caf82;
+  border-color: #0073ea;
+  color: #0073ea;
 }
 
 .add-column-dropdown {
@@ -579,7 +581,7 @@
 }
 
 .search-bar:focus-within {
-  border-color: #4caf82;
+  border-color: #0073ea;
 }
 
 .search-icon {
