@@ -35,6 +35,8 @@ export const COLUMN_TYPES = {
 export function createDefaultData() {
   const boardId = uuid();
   const board2Id = uuid();
+  const board3Id = uuid();
+  const board4Id = uuid();
 
   return {
     people: PEOPLE,
@@ -136,6 +138,107 @@ export function createDefaultData() {
             collapsed: false,
             items: [
               { id: uuid(), name: 'Typo on about page', values: {} },
+            ],
+          },
+        ],
+      },
+      {
+        id: board3Id,
+        name: 'Waste Truck Analytics (Demo)',
+        favorite: false,
+        columns: [
+          { id: uuid(), type: 'status', title: 'Status', width: 140 },
+          { id: uuid(), type: 'person', title: 'Owner', width: 140 },
+          { id: uuid(), type: 'date', title: 'Date', width: 140 },
+          { id: uuid(), type: 'text', title: 'Route / Area', width: 200 },
+          { id: uuid(), type: 'text', title: 'Truck ID', width: 140 },
+          { id: uuid(), type: 'numbers', title: 'Trips', width: 120 },
+          { id: uuid(), type: 'numbers', title: 'Tons Collected', width: 140 },
+          { id: uuid(), type: 'numbers', title: 'Fuel (L)', width: 120 },
+          { id: uuid(), type: 'priority', title: 'Priority', width: 140 },
+          { id: uuid(), type: 'text', title: 'Notes', width: 240 },
+        ],
+        groups: [
+          {
+            id: uuid(),
+            title: 'Dashboards & KPIs',
+            color: '#4caf82',
+            collapsed: false,
+            items: [
+              { id: uuid(), name: 'Daily collection dashboard (tons, trips, missed stops)', values: {} },
+              { id: uuid(), name: 'Fuel efficiency dashboard (L / ton, L / km)', values: {} },
+              { id: uuid(), name: 'Service level: on-time %, overflow incidents', values: {} },
+            ],
+          },
+          {
+            id: uuid(),
+            title: 'Data Pipelines',
+            color: '#fdab3d',
+            collapsed: false,
+            items: [
+              { id: uuid(), name: 'Ingest GPS pings (truck location every 10s)', values: {} },
+              { id: uuid(), name: 'Import weighbridge tickets / scale data', values: {} },
+              { id: uuid(), name: 'Join routes ↔ neighborhoods ↔ schedules', values: {} },
+            ],
+          },
+          {
+            id: uuid(),
+            title: 'Ops Alerts',
+            color: '#e2445c',
+            collapsed: false,
+            items: [
+              { id: uuid(), name: 'Alert when truck deviates from route > 300m', values: {} },
+              { id: uuid(), name: 'Alert when bin sensors show overflow risk', values: {} },
+            ],
+          },
+        ],
+      },
+      {
+        id: board4Id,
+        name: 'BoQ Management & Conversion (Demo)',
+        favorite: false,
+        columns: [
+          { id: uuid(), type: 'status', title: 'Status', width: 140 },
+          { id: uuid(), type: 'person', title: 'Owner', width: 140 },
+          { id: uuid(), type: 'priority', title: 'Priority', width: 140 },
+          { id: uuid(), type: 'text', title: 'Source Format', width: 160 },
+          { id: uuid(), type: 'text', title: 'Target Format', width: 160 },
+          { id: uuid(), type: 'numbers', title: 'Items', width: 120 },
+          { id: uuid(), type: 'numbers', title: 'Total (NIS)', width: 140 },
+          { id: uuid(), type: 'date', title: 'Due Date', width: 140 },
+          { id: uuid(), type: 'text', title: 'Notes', width: 260 },
+        ],
+        groups: [
+          {
+            id: uuid(),
+            title: 'Intake & Parsing',
+            color: '#4caf82',
+            collapsed: false,
+            items: [
+              { id: uuid(), name: 'Parse BoQ PDF → structured JSON (sections, items, units)', values: {} },
+              { id: uuid(), name: 'OCR + table extraction for scanned documents', values: {} },
+              { id: uuid(), name: 'Normalize units (m, m², m³, ton) + rounding rules', values: {} },
+            ],
+          },
+          {
+            id: uuid(),
+            title: 'Mapping & Conversion',
+            color: '#fdab3d',
+            collapsed: false,
+            items: [
+              { id: uuid(), name: 'Map item codes to internal catalog', values: {} },
+              { id: uuid(), name: 'Convert to contractor template (Excel) + validations', values: {} },
+              { id: uuid(), name: 'Generate comparison: original vs converted totals', values: {} },
+            ],
+          },
+          {
+            id: uuid(),
+            title: 'Approvals & Outputs',
+            color: '#00c875',
+            collapsed: false,
+            items: [
+              { id: uuid(), name: 'Approval workflow: estimator → PM → finance', values: {} },
+              { id: uuid(), name: 'Export: Excel + PDF summary + change log', values: {} },
             ],
           },
         ],
