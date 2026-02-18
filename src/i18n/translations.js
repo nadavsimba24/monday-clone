@@ -110,6 +110,9 @@ export const translations = {
     loading: 'Loading...',
     run: 'Run',
     running: 'Running...',
+    resetDb: 'Reset database',
+    seedDemoData: 'Load demo data',
+    resetDone: 'Done',
   },
   he: {
     // Sidebar
@@ -222,6 +225,9 @@ export const translations = {
     loading: 'טוען...',
     run: 'הרץ',
     running: 'מריץ...',
+    resetDb: 'איפוס דאטהבייס',
+    seedDemoData: 'טען דאטה דמו',
+    resetDone: 'בוצע',
   },
 };
 

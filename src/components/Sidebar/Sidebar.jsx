@@ -216,6 +216,26 @@ export default function Sidebar() {
                       />
                     </label>
                   </div>
+
+                  <div className="settings-row">
+                    <label>{t('resetDb')}</label>
+                    <button
+                      className="settings-action-btn"
+                      onClick={async () => {
+                        try {
+                          const resp = await fetch('/api/state/reset?seed=1', { method: 'POST' });
+                          const json = await resp.json().catch(() => ({}));
+                          if (resp.ok && json?.state) {
+                            dispatch({ type: 'IMPORT_STATE', state: json.state });
+                          }
+                        } catch (e) {
+                          console.error('Reset failed', e);
+                        }
+                      }}
+                    >
+                      {t('seedDemoData')}
+                    </button>
+                  </div>
                 </div>
               )}
             </div>

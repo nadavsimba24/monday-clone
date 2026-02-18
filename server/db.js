@@ -58,5 +58,12 @@ export async function openDb(dbPath) {
     persist();
   }
 
-  return { get, set, persist };
+  function del(key) {
+    const stmt = db.prepare('DELETE FROM kv WHERE key = ?');
+    stmt.run([key]);
+    stmt.free();
+    persist();
+  }
+
+  return { get, set, del, persist };
 }

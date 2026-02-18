@@ -91,6 +91,26 @@ app.put('/api/state', async (req, res) => {
   }
 });
 
+app.post('/api/state/reset', async (req, res) => {
+  try {
+    const db = await dbPromise;
+    const seed = Boolean(req.query.seed);
+
+    if (seed) {
+      // dynamic import to avoid server startup cycle
+      const { createDefaultData } = await import('../src/data/defaultData.js');
+      const state = createDefaultData();
+      db.set('state', JSON.stringify(state));
+      return res.json({ ok: true, state });
+    }
+
+    db.del('state');
+    res.json({ ok: true, state: null });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
 app.get('/api/n8n/workflows', async (req, res) => {
   try {
     const out = await n8nFetch('/workflows');
