@@ -1,14 +1,18 @@
 import 'dotenv/config';
 import express from 'express';
 import path from 'path';
+import { openDb } from './db.js';
 
 const app = express();
-app.use(express.json({ limit: '2mb' }));
+app.use(express.json({ limit: '10mb' }));
 
 function env(name, fallback = undefined) {
   const v = process.env[name];
   return (v && v.trim()) ? v.trim() : fallback;
 }
+
+const dbPath = env('DB_PATH', './data/monday-clone.sqlite');
+const dbPromise = openDb(dbPath);
 
 async function n8nFetch(pathname, { method = 'GET', body } = {}) {
   const base = env('N8N_BASE_URL');
@@ -62,6 +66,30 @@ async function n8nFetch(pathname, { method = 'GET', body } = {}) {
     clearTimeout(t);
   }
 }
+
+app.get('/api/state', async (_req, res) => {
+  try {
+    const db = await dbPromise;
+    const raw = db.get('state');
+    res.json({ state: raw ? JSON.parse(raw) : null });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
+
+app.put('/api/state', async (req, res) => {
+  try {
+    const db = await dbPromise;
+    const state = req.body?.state;
+    if (!state || typeof state !== 'object') {
+      return res.status(400).json({ error: 'Missing state object' });
+    }
+    db.set('state', JSON.stringify(state));
+    res.json({ ok: true });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+});
 
 app.get('/api/n8n/workflows', async (req, res) => {
   try {

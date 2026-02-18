@@ -16,3 +16,20 @@ export function saveState(state) {
     console.error('Failed to save state:', e);
   }
 }
+
+// ---- Remote persistence (best-effort) ----
+
+export async function loadRemoteState() {
+  const resp = await fetch('/api/state');
+  if (!resp.ok) return null;
+  const json = await resp.json().catch(() => null);
+  return json?.state || null;
+}
+
+export async function saveRemoteState(state) {
+  await fetch('/api/state', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ state }),
+  });
+}

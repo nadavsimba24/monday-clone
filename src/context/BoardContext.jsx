@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer, useEffect } from 'react';
 import { v4 as uuid } from 'uuid';
-import { loadState, saveState } from '../utils/storage';
+import { loadState, saveState, loadRemoteState, saveRemoteState } from '../utils/storage';
 import { createDefaultData } from '../data/defaultData';
 
 const BoardContext = createContext();
@@ -368,8 +368,30 @@ export function BoardProvider({ children }) {
     }
   );
 
+  // Load remote state on first mount (if available)
+  useEffect(() => {
+    let mounted = true;
+    loadRemoteState()
+      .then((remote) => {
+        if (!mounted) return;
+        if (remote && typeof remote === 'object') {
+          dispatch({ type: 'IMPORT_STATE', state: remote });
+        }
+      })
+      .catch(() => {});
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
   useEffect(() => {
     saveState(state);
+
+    // best-effort remote persistence (debounced)
+    const t = setTimeout(() => {
+      saveRemoteState(state).catch(() => {});
+    }, 600);
+    return () => clearTimeout(t);
   }, [state]);
 
   return (
